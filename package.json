@@ -2,7 +2,7 @@
   "name": "chartjs-plugin-stacked100",
   "version": "0.0.1",
   "description": "This plugin for Chart.js that makes your bar chart to 100% stacked bar chart",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/y-takey/chartjs-plugin-stacked100/issues"
   },
-  "homepage": "https://github.com/y-takey/chartjs-plugin-stacked100#readme"
+  "homepage": "https://github.com/y-takey/chartjs-plugin-stacked100#readme",
+  "dependencies": {
+    "chart.js": "^2.4.0"
+  }
 }
