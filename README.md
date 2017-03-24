@@ -61,3 +61,5 @@ new Chart(document.getElementById('stage'), {
   options: { stacked: "100%" }
 });
 ```
+
+![Result image](https://github.com/y-takey/chartjs-plugin-stacked100/blob/master/100%25stacked-bar-chart.png)
