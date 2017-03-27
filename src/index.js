@@ -1,8 +1,9 @@
 
 (function(Chart) {
   var Stacked100Plugin = {
-    beforeInit: function(chartInstance) {
-      if (chartInstance.options.stacked !== '100%') return;
+    id: 'stacked100'
+    beforeInit: function(chartInstance, pluginOptions) {
+      if (!pluginOptions.enable) return;
 
       var xAxes = chartInstance.options.scales.xAxes;
       var yAxes = chartInstance.options.scales.yAxes;
@@ -22,8 +23,8 @@
       };
     },
 
-    beforeUpdate: function(chartInstance) {
-      if (chartInstance.options.stacked !== '100%') return;
+    beforeUpdate: function(chartInstance, pluginOptions) {
+      if (!pluginOptions.enable) return;
 
       var datasets = chartInstance.data.datasets;
       var allData = datasets.map(function(dataset) { return dataset.data });

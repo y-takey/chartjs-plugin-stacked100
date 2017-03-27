@@ -9,12 +9,12 @@ npm install chartjs-plugin-stacked100 --save
 
 ## Usage
 
-specify chart options with `{ stacked: '100%' }`.
+specify plugin options with `{ stacked100: { enable: true } }`.
 
 #### a example
 
 ```javascript
-new Chart(document.getElementById('stage'), {
+new Chart(document.getElementById('my-chart'), {
   type: 'horizontalBar',
   data: {
     labels: ["Foo", "Bar"],
@@ -24,7 +24,11 @@ new Chart(document.getElementById('stage'), {
       { label: "good",   data: [10, 8],  backgroundColor: "rgba(100, 181, 246, 0.6)" }
     ]
   },
-  options: { stacked: "100%" }
+  options: {
+    plugins: {
+      stacked100: { enable: true }
+    }
+  }  
 });
 ```
 
