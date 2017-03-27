@@ -1,7 +1,8 @@
 
 (function(Chart) {
   var Stacked100Plugin = {
-    id: 'stacked100'
+    id: 'stacked100',
+
     beforeInit: function(chartInstance, pluginOptions) {
       if (!pluginOptions.enable) return;
 
