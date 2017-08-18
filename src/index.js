@@ -7,13 +7,14 @@
 
       var xAxes = chartInstance.options.scales.xAxes;
       var yAxes = chartInstance.options.scales.yAxes;
+      var isVertical = chartInstance.config.type === "bar";
 
       [xAxes, yAxes].forEach(function(axes) {
         axes.forEach(function(hash) {
           hash.stacked = true;
         });
       });
-      xAxes.forEach(function(hash) {
+      (isVertical ? yAxes : xAxes).forEach(function(hash) {
         hash.ticks.min = 0;
         hash.ticks.max = 100;
       });
