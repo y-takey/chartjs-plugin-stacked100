@@ -20,17 +20,26 @@
       });
 
       var allData = chartInstance.data.datasets.map(function(dataset) {
-        return dataset.data;
+        return Array.from(dataset.data);
       });
       chartInstance.data.originalData = allData;
 
       chartInstance.options.tooltips.callbacks.label = function(tooltipItem, data) {
         var datasetIndex = tooltipItem.datasetIndex,
           index = tooltipItem.index,
-          xLabel = tooltipItem.xLabel;
+          xLabel = tooltipItem.xLabel,
+          yLabel = tooltipItem.yLabel;
         var datasetLabel = data.datasets[datasetIndex].label || "";
 
-        return "" + datasetLabel + ": " + xLabel + "% (" + data.originalData[datasetIndex][index] + ")";
+        return (
+          "" +
+          datasetLabel +
+          ": " +
+          (isVertical ? yLabel : xLabel) +
+          "% (" +
+          data.originalData[datasetIndex][index] +
+          ")"
+        );
       };
     },
 
