@@ -54,8 +54,8 @@
         if (!dataset._meta) return true;
 
         for (var i in dataset._meta) {
-			return !dataset._meta[i].hidden;
-		}
+          return !dataset._meta[i].hidden;
+        }
       });
 
       var totals = Array.apply(null, new Array(allData[0].length)).map(function(el, i) {
