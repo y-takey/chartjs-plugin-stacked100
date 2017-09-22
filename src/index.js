@@ -47,7 +47,10 @@
       if (!pluginOptions.enable) return;
 
       var datasets = chartInstance.data.datasets;
-      var allData = chartInstance.data.originalData;
+      // restore
+      chartInstance.data.originalData.forEach(function(data, i) {
+        datasets[i].data = data;
+      });
 
       // for excluding value of hidden item.
       var visibles = datasets.map(function(dataset) {
@@ -58,14 +61,18 @@
         }
       });
 
-      var totals = Array.apply(null, new Array(allData[0].length)).map(function(el, i) {
-        return allData.reduce(function(sum, data, j) {
-          return sum + data[i] * visibles[j];
-        }, 0);
+      var totals = Array.apply(null, new Array(datasets[0].data.length)).map(function(el, i) {
+        return datasets.reduce(function(sum, dataset, j) {
+          var key = dataset.stack;
+          if (!sum[key]) sum[key] = 0;
+          sum[key] += dataset.data[i] * visibles[j];
+
+          return sum;
+        }, {});
       });
       datasets.forEach(function(dataset, i) {
-        dataset.data = allData[i].map(function(val, i) {
-          return Math.round(val * 1000 / totals[i]) / 10;
+        dataset.data = dataset.data.map(function(val, i) {
+          return val ? Math.round(val * 1000 / totals[i][dataset.stack]) / 10 : 0;
         });
       });
     }
