@@ -7,7 +7,7 @@
 
       var xAxes = chartInstance.options.scales.xAxes;
       var yAxes = chartInstance.options.scales.yAxes;
-      var isVertical = chartInstance.config.type === "bar";
+      var isVertical = chartInstance.config.type === "bar" || chartInstance.config.type === "line";
 
       [xAxes, yAxes].forEach(function(axes) {
         axes.forEach(function(hash) {
@@ -48,9 +48,11 @@
 
       var datasets = chartInstance.data.datasets;
       // restore
-      chartInstance.data.originalData.forEach(function(data, i) {
-        datasets[i].data = data;
-      });
+      if (chartInstance.data.originalData) {
+        chartInstance.data.originalData.forEach(function(data, i) {
+          datasets[i].data = data;
+        });
+      }
 
       // for excluding value of hidden item.
       var visibles = datasets.map(function(dataset) {
