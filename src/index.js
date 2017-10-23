@@ -19,10 +19,7 @@
         hash.ticks.max = 100;
       });
 
-      var allData = chartInstance.data.datasets.map(function(dataset) {
-        return Array.from(dataset.data);
-      });
-      chartInstance.data.originalData = allData;
+      this._setOriginalData(chartInstance);
 
       chartInstance.options.tooltips.callbacks.label = function(tooltipItem, data) {
         var datasetIndex = tooltipItem.datasetIndex,
@@ -52,6 +49,8 @@
         chartInstance.data.originalData.forEach(function(data, i) {
           datasets[i].data = data;
         });
+      } else {
+        this._setOriginalData(chartInstance);
       }
 
       // for excluding value of hidden item.
@@ -77,6 +76,13 @@
           return val ? Math.round(val * 1000 / totals[i][dataset.stack]) / 10 : 0;
         });
       });
+    },
+ 
+    _setOriginalData: function(chartInstance) {
+      var allData = chartInstance.data.datasets.map(function(dataset) {
+        return Array.from(dataset.data);
+      });
+      chartInstance.data.originalData = allData;
     }
   };
 
