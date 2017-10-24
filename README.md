@@ -34,4 +34,22 @@ new Chart(document.getElementById('my-chart'), {
 });
 ```
 
-![Result image](https://github.com/y-takey/chartjs-plugin-stacked100/blob/master/100%25stacked-bar-chart.png)
+![Result image](https://raw.githubusercontent.com/y-takey/chartjs-plugin-stacked100/master/100%25stacked-bar-chart.png)
+
+## Supported chart types
+
+* bar
+* horizontalBar
+* line (via [@HoJSim](https://github.com/HoJSim), thanks!)
+
+## Contributing
+
+Pull requests and issues are always welcome.
+
+For bugs and feature requests, [please create an issue](https://github.com/y-takey/chartjs-plugin-stacked100/issues).
+
+1. Fork it!
+2. Create your feature branch: `git checkout -b my-new-feature`
+3. Commit your changes: `git commit -am 'Add some feature'`
+4. Push to the branch: `git push origin my-new-feature`
+5. Submit a pull request!
