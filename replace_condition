@@ -1,0 +1,1 @@
+s/\.\.\/src\/index\.js/\.\/plugin\.js/g
