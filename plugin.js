@@ -1,4 +1,14 @@
 (function(Chart) {
+  var cloneArray = function(srcAry) {
+    var dstAry = [];
+    var length = srcAry.length;
+
+    for (var i = 0; i < length; i++) {
+      dstAry.push(srcAry[i]);
+    }
+    return dstAry;
+  };
+
   var Stacked100Plugin = {
     id: "stacked100",
 
@@ -77,10 +87,10 @@
         });
       });
     },
- 
+
     _setOriginalData: function(chartInstance) {
       var allData = chartInstance.data.datasets.map(function(dataset) {
-        return Array.from(dataset.data);
+        return cloneArray(dataset.data);
       });
       chartInstance.data.originalData = allData;
     }
