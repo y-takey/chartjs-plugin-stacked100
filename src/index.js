@@ -37,7 +37,8 @@
 
     data.calculatedData = data.datasets.map(function(dataset, i) {
       return dataset.data.map(function(val, i) {
-        return val ? Math.round(val * 1000 / totals[i][dataset.stack]) / 10 : 0;
+        var total = totals[i][dataset.stack];
+        return val && total ? Math.round(val * 1000 / total) / 10 : 0;
       });
     });
   };
@@ -83,7 +84,7 @@
       chartInstance.options.tooltips.callbacks.label = tooltipLabel;
     },
 
-    beforeUpdate: function(chartInstance, pluginOptions) {
+    beforeDatasetsUpdate: function(chartInstance, pluginOptions) {
       if (!pluginOptions.enable) return;
 
       setOriginalData(chartInstance.data);
@@ -91,7 +92,7 @@
       reflectData(chartInstance.data.calculatedData, chartInstance.data.datasets);
     },
 
-    afterRender: function(chartInstance, pluginOptions) {
+    afterDatasetsUpdate: function(chartInstance, pluginOptions) {
       if (!pluginOptions.enable) return;
 
       reflectData(chartInstance.data.originalData, chartInstance.data.datasets);
