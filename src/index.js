@@ -81,6 +81,8 @@
         hash.ticks.max = 100;
       });
 
+      // Replace tooltips
+      if (pluginOptions.hasOwnProperty("replaceTooltipLabel") && !pluginOptions.replaceTooltipLabel) return;
       chartInstance.options.tooltips.callbacks.label = tooltipLabel;
     },
 
