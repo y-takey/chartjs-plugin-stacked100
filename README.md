@@ -1,4 +1,5 @@
 # chartjs-plugin-stacked100
+
 This plugin for Chart.js that makes your bar chart to 100% stacked bar chart.
 
 Demo: https://y-takey.github.io/chartjs-plugin-stacked100
@@ -11,7 +12,40 @@ npm install chartjs-plugin-stacked100 --save
 
 ## Usage
 
+### Basic
+
 specify plugin options with `{ stacked100: { enable: true } }`.
+
+### Use your tooltip label
+
+specify plugin options with `{ stacked100: { enable: true, replaceTooltipLabel: false } }`.
+and you can pass tooltip option.
+
+```javascript
+new Chart(document.getElementById("my-chart"), {
+  type: "bar",
+  data: {},
+  options: {
+    tooltips: {
+      callbacks: {
+        label: (tooltipItem, data) => {
+          const datasetIndex = tooltipItem.datasetIndex;
+          const datasetLabel = data.datasets[datasetIndex].label;
+          // You can use two type values.
+          // `data.originalData` is raw values,
+          // `data.calculatedData` is percentage values, e.g. 20.5 (The total value is 100.0)
+          const originalValue = data.originalData[datasetIndex][tooltipItem.index];
+          const rateValue = data.calculatedData[datasetIndex][tooltipItem.index];
+          return `${datasetLabel}: ${rateValue}% (raw ${originalValue})`;
+        }
+      }
+    },
+    plugins: {
+      stacked100: { enable: true, replaceTooltipLabel: false }
+    }
+  }
+});
+```
 
 #### a example
 
