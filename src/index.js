@@ -24,8 +24,12 @@
         return !dataset._meta[i].hidden;
       }
     });
-
-    var totals = Array.apply(null, new Array(data.datasets[0].data.length)).map(function(el, i) {
+    
+    var datasetDataLength = 0;
+    if (data && data.datasets && data.datasets[0] && data.datasets[0].data) {
+      datasetDataLength = data.datasets[0].data.length;
+    }
+    var totals = Array.apply(null, new Array(datasetDataLength)).map(function(el, i) {
       return data.datasets.reduce(function(sum, dataset, j) {
         var key = dataset.stack;
         if (!sum[key]) sum[key] = 0;
