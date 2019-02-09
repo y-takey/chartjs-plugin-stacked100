@@ -81,8 +81,8 @@
         });
       });
       (isVertical ? yAxes : xAxes).forEach(function(hash) {
-        hash.ticks.min = 0;
-        hash.ticks.max = 100;
+        if (!hash.ticks.min) hash.ticks.min = 0;
+        if (!hash.ticks.max) hash.ticks.max = 100;
       });
 
       // Replace tooltips
