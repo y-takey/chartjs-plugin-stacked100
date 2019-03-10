@@ -68,7 +68,7 @@
     var originalValue = data.originalData[datasetIndex][index];
     var rateValue = data.calculatedData[datasetIndex][index];
 
-    return "" + datasetLabel + ": " + rateValue + "% (" + originalValue + ")";
+    return "" + datasetLabel + ": " + rateValue + "% (" + dataValue(originalValue) + ")";
   };
 
   var reflectData = function(srcData, datasets) {
