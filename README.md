@@ -70,6 +70,26 @@ new Chart(document.getElementById("my-chart"), {
 
 ![Result image](https://raw.githubusercontent.com/y-takey/chartjs-plugin-stacked100/master/100%25stacked-bar-chart.png)
 
+#### Datapoints can be Objects
+
+```javascript
+...
+// line or bar charts
+datasets: [
+  { data: [{ y: 5 }, { y: 25 }] },
+  { data: [{ y: 15 }, { y: 10 }] },
+  { data: [{ y: 10 }, { y: 8 }] }
+]
+
+// horizontalBar charts
+datasets: [
+  { data: [{ x: 5 }, { x: 25 }] },
+  { data: [{ x: 15 }, { x: 10 }] },
+  { data: [{ x: 10 }, { x: 8 }] }
+]
+...
+```
+
 ##### How to use datalabels plugin
 
 ```javascript
