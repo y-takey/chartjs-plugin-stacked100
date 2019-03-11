@@ -79,3 +79,42 @@ new Chart(document.getElementById("my-chart-4"), {
     }
   }
 });
+
+new Chart(document.getElementById("my-chart-5"), {
+  type: "line",
+  data: {
+    labels: ["2017-10-18", "2017-10-19", "2017-10-20"],
+    datasets: [
+      { label: "L1", fill: true, data: [{ y: 1 }, { y: 2 }, { y: 0 }], backgroundColor: "rgba(244, 143, 177, 0.6)" },
+      { label: "L2", fill: true, data: [{ y: 1 }, { y: 1 }, { y: 3 }], backgroundColor: "rgba(255, 235, 59, 0.6)" },
+      { label: "L3", fill: true, data: [{ y: 1 }, { y: 1 }, { y: 2 }], backgroundColor: "rgba(100, 181, 246, 0.6)" },
+      { label: "L4", fill: true, data: [{ y: 1 }, { y: 3 }, { y: 1 }], backgroundColor: "rgba(51, 255, 74, 0.4)" }
+    ]
+  },
+  options: {
+    scales: {
+      xAxes: [{ stacked: true }],
+      yAxes: [{ stacked: true }]
+    },
+    plugins: {
+      stacked100: { enable: true }
+    }
+  }
+});
+
+new Chart(document.getElementById("my-chart-6"), {
+  type: "horizontalBar",
+  data: {
+    labels: ["Foo", "Bar"],
+    datasets: [
+      { label: "bad", data: [{ x: 5 }, { x: 25 }], backgroundColor: "rgba(244, 143, 177, 0.6)" },
+      { label: "better", data: [{ x: 15 }, { x: 10 }], backgroundColor: "rgba(255, 235, 59, 0.6)" },
+      { label: "good", data: [{ x: 10 }, { x: 8 }], backgroundColor: "rgba(100, 181, 246, 0.6)" }
+    ]
+  },
+  options: {
+    plugins: {
+      stacked100: { enable: true }
+    }
+  }
+});
