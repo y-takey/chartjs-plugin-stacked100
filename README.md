@@ -74,10 +74,18 @@ new Chart(document.getElementById("my-chart"), {
 
 ```javascript
 ...
+// line or bar charts
 datasets: [
-  { label: "bad", data: [{ y: 5 }, { y: 25 }], backgroundColor: "rgba(244, 143, 177, 0.6)" },
-  { label: "better", data: [{ y: 15 }, { y: 10 }], backgroundColor: "rgba(255, 235, 59, 0.6)" },
-  { label: "good", data: [{ y: 10 }, { y: 8 }], backgroundColor: "rgba(100, 181, 246, 0.6)" }
+  { data: [{ y: 5 }, { y: 25 }] },
+  { data: [{ y: 15 }, { y: 10 }] },
+  { data: [{ y: 10 }, { y: 8 }] }
+]
+
+// horizontalBar charts
+datasets: [
+  { data: [{ x: 5 }, { x: 25 }] },
+  { data: [{ x: 15 }, { x: 10 }] },
+  { data: [{ x: 10 }, { x: 8 }] }
 ]
 ...
 ```

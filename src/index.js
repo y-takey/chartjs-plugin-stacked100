@@ -4,9 +4,9 @@
     return type === 'object' && !!obj;
   }
 
-  var dataValue = function(dataPoint) {
+  var dataValue = function(dataPoint, isHorizontal) {
     if (isObject(dataPoint)) {
-      return dataPoint.y;
+      return isHorizontal ? dataPoint.x : dataPoint.y;
     }
 
     return dataPoint;
@@ -29,7 +29,7 @@
   };
 
   // set calculated rate (xx%) to data.calculatedData
-  var calculateRate = function(data) {
+  var calculateRate = function(data, isHorizontal) {
     var visibles = data.datasets.map(function(dataset) {
       if (!dataset._meta) return true;
 
@@ -46,7 +46,7 @@
       return data.datasets.reduce(function(sum, dataset, j) {
         var key = dataset.stack;
         if (!sum[key]) sum[key] = 0;
-        sum[key] += dataValue(dataset.data[i]) * visibles[j];
+        sum[key] += dataValue(dataset.data[i], isHorizontal) * visibles[j];
 
         return sum;
       }, {});
@@ -55,20 +55,22 @@
     data.calculatedData = data.datasets.map(function(dataset, i) {
       return dataset.data.map(function(val, i) {
         var total = totals[i][dataset.stack];
-        var dv = dataValue(val);
+        var dv = dataValue(val, isHorizontal);
         return dv && total ? Math.round(dv * 1000 / total) / 10 : 0;
       });
     });
   };
 
-  var tooltipLabel = function(tooltipItem, data) {
-    var datasetIndex = tooltipItem.datasetIndex;
-    var index = tooltipItem.index;
-    var datasetLabel = data.datasets[datasetIndex].label || "";
-    var originalValue = data.originalData[datasetIndex][index];
-    var rateValue = data.calculatedData[datasetIndex][index];
+  var tooltipLabel = function(isHorizontal) {
+    return function(tooltipItem, data) {
+      var datasetIndex = tooltipItem.datasetIndex;
+      var index = tooltipItem.index;
+      var datasetLabel = data.datasets[datasetIndex].label || "";
+      var originalValue = data.originalData[datasetIndex][index];
+      var rateValue = data.calculatedData[datasetIndex][index];
 
-    return "" + datasetLabel + ": " + rateValue + "% (" + dataValue(originalValue) + ")";
+      return "" + datasetLabel + ": " + rateValue + "% (" + dataValue(originalValue, isHorizontal) + ")";
+    }
   };
 
   var reflectData = function(srcData, datasets) {
@@ -78,6 +80,10 @@
       datasets[i].data = data;
     });
   };
+
+  var isHorizontalChart = function(chartInstance) {
+    return chartInstance.config.type === "horizontalBar";
+  }
 
   var Stacked100Plugin = {
     id: "stacked100",
@@ -101,14 +107,14 @@
 
       // Replace tooltips
       if (pluginOptions.hasOwnProperty("replaceTooltipLabel") && !pluginOptions.replaceTooltipLabel) return;
-      chartInstance.options.tooltips.callbacks.label = tooltipLabel;
+      chartInstance.options.tooltips.callbacks.label = tooltipLabel(isHorizontalChart(chartInstance));
     },
 
     beforeDatasetsUpdate: function(chartInstance, pluginOptions) {
       if (!pluginOptions.enable) return;
 
       setOriginalData(chartInstance.data);
-      calculateRate(chartInstance.data);
+      calculateRate(chartInstance.data, isHorizontalChart(chartInstance));
       reflectData(chartInstance.data.calculatedData, chartInstance.data.datasets);
     },
 
