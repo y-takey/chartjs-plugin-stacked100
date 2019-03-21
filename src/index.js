@@ -57,6 +57,7 @@
         var total = totals[i][dataset.stack];
         var dv = dataValue(val, isHorizontal);
         return dv && total ? Math.round(dv * 1000 / total) / 10 : 0;
+        return dv && total ? round(dv / total) : 0;
       });
     });
   };
