@@ -61,6 +61,12 @@
     });
   };
 
+    var precision = 2;
+    var round = function(value) {
+		var multiplicator = Math.pow(10, precision);
+		return Math.round(value * 100 * multiplicator) / multiplicator;
+	};
+    
   var tooltipLabel = function(isHorizontal) {
     return function(tooltipItem, data) {
       var datasetIndex = tooltipItem.datasetIndex;
@@ -94,6 +100,14 @@
       var xAxes = chartInstance.options.scales.xAxes;
       var yAxes = chartInstance.options.scales.yAxes;
       var isVertical = chartInstance.config.type === "bar" || chartInstance.config.type === "line";
+      
+      if (pluginOptions.hasOwnProperty("precision")) {
+        if (!pluginOptions.precision) return;
+        var precisionOption = Math.floor(pluginOptions.precision);
+        if (isNaN(precisionOption)) return;
+        if (precisionOption < 0 || precisionOption > 16) return; 
+        precision = precisionOption;
+      };
 
       [xAxes, yAxes].forEach(function(axes) {
         axes.forEach(function(hash) {
