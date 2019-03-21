@@ -61,7 +61,6 @@
     });
   };
 
-    var precision = 2;
     var round = function(value) {
 		var multiplicator = Math.pow(10, precision);
 		return Math.round(value * 100 * multiplicator) / multiplicator;
