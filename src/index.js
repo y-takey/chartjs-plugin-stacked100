@@ -29,7 +29,7 @@
   };
 
   // set calculated rate (xx%) to data.calculatedData
-  var calculateRate = function(data, isHorizontal) {
+  var calculateRate = function(data, isHorizontal, precision) {
     var visibles = data.datasets.map(function(dataset) {
       if (!dataset._meta) return true;
 
@@ -56,13 +56,23 @@
       return dataset.data.map(function(val, i) {
         var total = totals[i][dataset.stack];
         var dv = dataValue(val, isHorizontal);
-        return dv && total ? round(dv / total) : 0;
+        return dv && total ? round(dv / total, precision) : 0;
       });
     });
   };
 
-    var precision = 1;
-    var round = function(value) {
+    var getPrecision = function(pluginOptions) {
+        // return the (validated) configured precision from pluginOptions or default 1
+        var defaultPrecision = 1;
+        if (!pluginOptions.hasOwnProperty("precision")) return defaultPrecision;
+        if (!pluginOptions.precision) return defaultPrecision;
+        var optionsPrecision = Math.floor(pluginOptions.precision);
+        if (isNaN(optionsPrecision)) return defaultPrecision;
+        if (optionsPrecision < 0 || optionsPrecision > 16) return defaultPrecision; 
+        return optionsPrecision;
+      };
+
+    var round = function(value, precision) {
 		var multiplicator = Math.pow(10, precision);
 		return Math.round(value * 100 * multiplicator) / multiplicator;
 	};
@@ -100,14 +110,6 @@
       var xAxes = chartInstance.options.scales.xAxes;
       var yAxes = chartInstance.options.scales.yAxes;
       var isVertical = chartInstance.config.type === "bar" || chartInstance.config.type === "line";
-      
-      if (pluginOptions.hasOwnProperty("precision")) {
-        if (!pluginOptions.precision) return;
-        var precisionOption = Math.floor(pluginOptions.precision);
-        if (isNaN(precisionOption)) return;
-        if (precisionOption < 0 || precisionOption > 16) return; 
-        precision = precisionOption;
-      };
 
       [xAxes, yAxes].forEach(function(axes) {
         axes.forEach(function(hash) {
@@ -128,7 +130,8 @@
       if (!pluginOptions.enable) return;
 
       setOriginalData(chartInstance.data);
-      calculateRate(chartInstance.data, isHorizontalChart(chartInstance));
+      var precision = getPrecision(pluginOptions);
+      calculateRate(chartInstance.data, isHorizontalChart(chartInstance), precision);
       reflectData(chartInstance.data.calculatedData, chartInstance.data.datasets);
     },
 
