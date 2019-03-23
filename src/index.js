@@ -29,7 +29,7 @@
   };
 
   // set calculated rate (xx%) to data.calculatedData
-  var calculateRate = function(data, isHorizontal) {
+  var calculateRate = function(data, isHorizontal, precision) {
     var visibles = data.datasets.map(function(dataset) {
       if (!dataset._meta) return true;
 
@@ -56,11 +56,27 @@
       return dataset.data.map(function(val, i) {
         var total = totals[i][dataset.stack];
         var dv = dataValue(val, isHorizontal);
-        return dv && total ? Math.round(dv * 1000 / total) / 10 : 0;
+        return dv && total ? round(dv / total, precision) : 0;
       });
     });
   };
 
+    var getPrecision = function(pluginOptions) {
+        // return the (validated) configured precision from pluginOptions or default 1
+        var defaultPrecision = 1;
+        if (!pluginOptions.hasOwnProperty("precision")) return defaultPrecision;
+        if (!pluginOptions.precision) return defaultPrecision;
+        var optionsPrecision = Math.floor(pluginOptions.precision);
+        if (isNaN(optionsPrecision)) return defaultPrecision;
+        if (optionsPrecision < 0 || optionsPrecision > 16) return defaultPrecision; 
+        return optionsPrecision;
+      };
+
+    var round = function(value, precision) {
+		var multiplicator = Math.pow(10, precision);
+		return Math.round(value * 100 * multiplicator) / multiplicator;
+	};
+    
   var tooltipLabel = function(isHorizontal) {
     return function(tooltipItem, data) {
       var datasetIndex = tooltipItem.datasetIndex;
@@ -114,7 +130,8 @@
       if (!pluginOptions.enable) return;
 
       setOriginalData(chartInstance.data);
-      calculateRate(chartInstance.data, isHorizontalChart(chartInstance));
+      var precision = getPrecision(pluginOptions);
+      calculateRate(chartInstance.data, isHorizontalChart(chartInstance), precision);
       reflectData(chartInstance.data.calculatedData, chartInstance.data.datasets);
     },
 
