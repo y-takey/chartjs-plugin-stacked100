@@ -47,6 +47,12 @@ new Chart(document.getElementById("my-chart"), {
 });
 ```
 
+### Specify the precision of the percentage value
+
+You can pass `precision` option. (default value is `1` )
+For example, when you pass `{ stacked100: { enable: true, precision: 3 } }`, the result is `0.123%` .
+
+
 #### Examples
 
 ```javascript
