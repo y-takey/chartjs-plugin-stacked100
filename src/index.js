@@ -61,22 +61,22 @@
     });
   };
 
-    var getPrecision = function(pluginOptions) {
-        // return the (validated) configured precision from pluginOptions or default 1
-        var defaultPrecision = 1;
-        if (!pluginOptions.hasOwnProperty("precision")) return defaultPrecision;
-        if (!pluginOptions.precision) return defaultPrecision;
-        var optionsPrecision = Math.floor(pluginOptions.precision);
-        if (isNaN(optionsPrecision)) return defaultPrecision;
-        if (optionsPrecision < 0 || optionsPrecision > 16) return defaultPrecision; 
-        return optionsPrecision;
-      };
+  var getPrecision = function(pluginOptions) {
+    // return the (validated) configured precision from pluginOptions or default 1
+    var defaultPrecision = 1;
+    if (!pluginOptions.hasOwnProperty("precision")) return defaultPrecision;
+    if (!pluginOptions.precision) return defaultPrecision;
+    var optionsPrecision = Math.floor(pluginOptions.precision);
+    if (isNaN(optionsPrecision)) return defaultPrecision;
+    if (optionsPrecision < 0 || optionsPrecision > 16) return defaultPrecision; 
+    return optionsPrecision;
+  };
 
-    var round = function(value, precision) {
-		var multiplicator = Math.pow(10, precision);
-		return Math.round(value * 100 * multiplicator) / multiplicator;
-	};
-    
+  var round = function(value, precision) {
+    var multiplicator = Math.pow(10, precision);
+    return Math.round(value * 100 * multiplicator) / multiplicator;
+  };
+
   var tooltipLabel = function(isHorizontal) {
     return function(tooltipItem, data) {
       var datasetIndex = tooltipItem.datasetIndex;
