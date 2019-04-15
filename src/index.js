@@ -46,7 +46,7 @@
       return data.datasets.reduce(function(sum, dataset, j) {
         var key = dataset.stack;
         if (!sum[key]) sum[key] = 0;
-        sum[key] += dataValue(dataset.data[i], isHorizontal) * visibles[j];
+        sum[key] += Math.abs(dataValue(dataset.data[i], isHorizontal)) * visibles[j];
 
         return sum;
       }, {});
@@ -117,7 +117,14 @@
         });
       });
       (isVertical ? yAxes : xAxes).forEach(function(hash) {
-        if (!hash.ticks.min) hash.ticks.min = 0;
+        if (!hash.ticks.min) {
+          var hasNegative = chartInstance.data.datasets.some(function(dataset) {
+            return dataset.data.some(function(value) {
+              return value < 0;
+            });
+          });
+          hash.ticks.min = hasNegative ? -100 : 0;
+        }
         if (!hash.ticks.max) hash.ticks.max = 100;
       });
 
