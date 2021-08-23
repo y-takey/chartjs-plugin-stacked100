@@ -5,7 +5,10 @@
   "main": "src/index.js",
   "scripts": {
     "deploy": "cp -R test/* demo && cp src/index.js demo/plugin.js && sed -i '' -f replace_condition demo/index.html && gh-pages -d demo",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack serve --mode development --config ./webpack/demo.config.js",
+    "build:demo": "webpack --mode production --config ./webpack/demo.config.js",
+    "build:plugin": "webpack --mode production --config ./webpack/plugin.config.js && tsc",
+    "test": "jest --silent"
   },
   "repository": {
     "type": "git",
@@ -21,9 +24,22 @@
   },
   "homepage": "https://github.com/y-takey/chartjs-plugin-stacked100#readme",
   "dependencies": {
-    "chart.js": "^2.4.0"
+    "chart.js": "^3.0.0"
   },
   "devDependencies": {
-    "gh-pages": "^1.0.0"
+    "@typescript-eslint/eslint-plugin": "^4.29.2",
+    "@typescript-eslint/parser": "^4.29.2",
+    "eslint": "^7.32.0",
+    "gh-pages": "^1.0.0",
+    "html-webpack-plugin": "^5.3.2",
+    "jest": "^27.0.6",
+    "prettier": "^2.3.2",
+    "prettier-webpack-plugin": "^1.2.0",
+    "terser-webpack-plugin": "^5.1.4",
+    "ts-loader": "^9.2.5",
+    "typescript": "^4.3.5",
+    "webpack": "^5.51.1",
+    "webpack-cli": "^4.8.0",
+    "webpack-dev-server": "^4.0.0"
   }
 }
