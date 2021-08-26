@@ -12,7 +12,7 @@
   "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
   "rules": {
       "comma-dangle": 0,
-      "no-unused-vars": "warn",
+      "no-unused-vars": "off",
       "no-unexpected-multiline": "warn",
       "prefer-const": "warn",
       "@typescript-eslint/no-empty-function": "off",
