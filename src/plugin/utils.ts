@@ -1,9 +1,9 @@
-import { ExtendedChartData, PluginOptions } from "./types"
+import { ExtendedChartData, PluginOptions } from "./types";
 
 export const isObject = (obj: any) => {
   const type = typeof obj;
-  return type === 'object' && !!obj;
-}
+  return type === "object" && !!obj;
+};
 
 export const dataValue = (dataPoint: any, isHorizontal: boolean) => {
   if (isObject(dataPoint)) {
@@ -11,7 +11,7 @@ export const dataValue = (dataPoint: any, isHorizontal: boolean) => {
   }
 
   return dataPoint;
-}
+};
 
 const cloneArray = <T>(srcAry: T[]): T[] => {
   return [...srcAry];
@@ -35,7 +35,6 @@ export const getPrecision = (pluginOptions: PluginOptions): number => {
   if (!pluginOptions.precision) return defaultPrecision;
   const optionsPrecision = Math.floor(pluginOptions.precision);
   if (isNaN(optionsPrecision)) return defaultPrecision;
-  if (optionsPrecision < 0 || optionsPrecision > 16) return defaultPrecision; 
+  if (optionsPrecision < 0 || optionsPrecision > 16) return defaultPrecision;
   return optionsPrecision;
 };
-
