@@ -1,13 +1,13 @@
-import { Chart, ChartType, TooltipCallbacks, TooltipItem } from "chart.js"
+import { Chart, ChartType, TooltipCallbacks, TooltipItem } from "chart.js";
 
-import { dataValue, setOriginalData, round, getPrecision } from "./utils"
+import { dataValue, setOriginalData, round, getPrecision } from "./utils";
 import { ExtendedChartData, ExtendedPlugin } from "./types"
 
-const calculateRate = function(data: ExtendedChartData, isHorizontal: boolean, precision: number) {
+const calculateRate = (data: ExtendedChartData, isHorizontal: boolean, precision: number) => {
   const visibles = data.datasets.map((dataset) => dataset.hidden ? 0 : 1 );
   const datasetDataLength = data?.datasets?.[0]?.data?.length || 0;
 
-  const totals = [...(new Array(datasetDataLength))].map((el, i) =>  {
+  const totals = [...(new Array(datasetDataLength))].map((el, i) => {
     return data.datasets.reduce((sum, dataset, j) => {
       const key = dataset.stack;
       if (!sum[key]) sum[key] = 0;
@@ -17,8 +17,8 @@ const calculateRate = function(data: ExtendedChartData, isHorizontal: boolean, p
     }, {});
   });
 
-  return data.datasets.map((dataset)  => {
-    return dataset.data.map((val, j)  => {
+  return data.datasets.map((dataset) => {
+    return dataset.data.map((val, j) => {
       const total = totals[j][dataset.stack];
       const dv = dataValue(val, isHorizontal);
       return dv && total ? round(dv / total, precision) : 0;
@@ -27,19 +27,20 @@ const calculateRate = function(data: ExtendedChartData, isHorizontal: boolean, p
 };
 
 const tooltipLabel = (isHorizontal: boolean): TooltipCallbacks<ChartType>["label"] => {
-  return (tooltipItem: TooltipItem<ChartType>)  => {
-    const data = tooltipItem.chart.data as ExtendedChartData
+  return (tooltipItem: TooltipItem<ChartType>) => {
+    const data = tooltipItem.chart.data as ExtendedChartData;
     const datasetIndex = tooltipItem.datasetIndex;
     const index = tooltipItem.dataIndex;
     const datasetLabel = data.datasets[datasetIndex].label || "";
     const originalValue = data.originalData[datasetIndex][index];
     const rateValue = data.calculatedData[datasetIndex][index];
+    const value = dataValue(originalValue, isHorizontal);
 
-    return "" + datasetLabel + ": " + rateValue + "% (" + dataValue(originalValue, isHorizontal) + ")";
+    return `${datasetLabel}: ${rateValue}% (${value})`;
   }
 };
 
-const reflectData = (srcData: any[], datasets: ExtendedChartData["datasets"])  => {
+const reflectData = (srcData: any[], datasets: ExtendedChartData["datasets"]) => {
   if (!srcData) return;
 
   srcData.forEach((data, i)  => {
