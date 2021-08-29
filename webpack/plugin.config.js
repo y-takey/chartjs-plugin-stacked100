@@ -12,7 +12,7 @@ module.exports = {
   output: {
     filename: 'index.js',
     path: path.resolve('./build'),
-    library: "ChartPluginStacked100",
+    library: "ChartjsPluginStacked100",
     libraryTarget: 'umd',
     clean: true
   },
