@@ -1,10 +1,10 @@
-import { beforeInit, beforeDatasetsUpdate, afterDatasetsUpdate } from "./plugin"
+import { beforeInit, beforeUpdate, afterUpdate } from "./plugin"
 
 const ChartPluginStacked100 = {
   id: "stacked100",
   beforeInit,
-  beforeDatasetsUpdate,
-  afterDatasetsUpdate
+  beforeUpdate,
+  afterUpdate
 };
 
 export default ChartPluginStacked100;

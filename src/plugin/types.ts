@@ -1,8 +1,10 @@
-import { Plugin, ChartType, ChartData } from "chart.js"
+import { Plugin, ChartType, ChartData, ScatterDataPoint } from "chart.js"
+
+type PluginDataPoint = number | ScatterDataPoint
 
 export type ExtendedChartData = ChartData & {
   calculatedData?: number[][];
-  originalData?: ChartData["datasets"]
+  originalData?: PluginDataPoint[][];
 }
 
 export type ExtendedPlugin = Plugin<ChartType, PluginOptions>
