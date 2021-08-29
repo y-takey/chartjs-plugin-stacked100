@@ -1,5 +1,4 @@
 const path = require('path');
-const PrettierPlugin = require("prettier-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 
 const commonConfig = require("./common.config");
@@ -22,7 +21,4 @@ module.exports = {
       new TerserPlugin({ extractComments: false }),
     ],
   },
-  plugins: [
-    new PrettierPlugin(),
-  ],
 };
