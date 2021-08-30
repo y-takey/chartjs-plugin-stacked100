@@ -2,12 +2,40 @@
 
 This plugin for Chart.js that makes your bar chart to 100% stacked bar chart.
 
+Requires **Chart.js 3.x**.
+
 Demo: https://y-takey.github.io/chartjs-plugin-stacked100
 
 ## Installation
 
+### npm
+
+```
+yarn add chartjs-plugin-stacked100
+```
+
+or
+
 ```
 npm install chartjs-plugin-stacked100 --save
+```
+
+```js
+import { Chart } from "chart.js";
+import ChartjsPluginStacked100 from "chartjs-plugin-stacked100";
+
+Chart.register(ChartjsPluginStacked100);
+```
+
+### CDN
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-stacked100@1.0.0"></script>
+```
+
+```js
+Chart.register(ChartjsPluginStacked100);
 ```
 
 ## Usage
@@ -57,7 +85,7 @@ For example, when you pass `{ stacked100: { enable: true, precision: 3 } }`, the
 
 ```javascript
 new Chart(document.getElementById("my-chart"), {
-  type: "horizontalBar",
+  type: "bar",
   data: {
     labels: ["Foo", "Bar"],
     datasets: [
@@ -67,6 +95,7 @@ new Chart(document.getElementById("my-chart"), {
     ]
   },
   options: {
+    indexAxis: "y",
     plugins: {
       stacked100: { enable: true }
     }
@@ -100,7 +129,7 @@ datasets: [
 
 ```javascript
 new Chart(document.getElementById("my-chart"), {
-  type: "horizontalBar",
+  type: "bar",
   data: {},
   options: {
     plugins: {
@@ -120,7 +149,6 @@ new Chart(document.getElementById("my-chart"), {
 ## Supported chart types
 
 * bar
-* horizontalBar
 * line (via [@HoJSim](https://github.com/HoJSim), thanks!)
 
 ## Contributing
