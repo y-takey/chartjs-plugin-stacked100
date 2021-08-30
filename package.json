@@ -1,6 +1,6 @@
 {
   "name": "chartjs-plugin-stacked100",
-  "version": "0.7.1",
+  "version": "1.0.0",
   "description": "This plugin for Chart.js that makes your bar chart to 100% stacked bar chart",
   "main": "build/index.js",
   "scripts": {
