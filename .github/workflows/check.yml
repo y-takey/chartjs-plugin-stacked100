@@ -1,0 +1,27 @@
+name: CICD
+
+# Triggers when pushed to master branch
+on:
+  push:
+    paths-ignore:
+      - "README.md"
+      - "build/**"
+      - "demo/**"
+
+jobs:
+  release:
+    name: lint type-check test
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: setup-node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install Dependencies
+        run: |
+          yarn install
+          yarn dev
