@@ -3,8 +3,7 @@ import { Chart, ChartType, TooltipCallbacks, TooltipItem } from "chart.js";
 import { dataValue, setOriginalData, round, getPrecision } from "./utils";
 import { ExtendedChartData, ExtendedPlugin } from "./types"
 
-const calculateRate = (data: ExtendedChartData, isHorizontal: boolean, precision: number) => {
-  const visibles = data.datasets.map((dataset) => dataset.hidden ? 0 : 1 );
+const calculateRate = (data: ExtendedChartData, visibles: number[], isHorizontal: boolean, precision: number) => {
   const datasetDataLength = data?.datasets?.[0]?.data?.length || 0;
 
   const totals = [...(new Array(datasetDataLength))].map((el, i) => {
@@ -80,8 +79,9 @@ export const beforeUpdate: ExtendedPlugin["beforeUpdate"] = (chartInstance, _arg
   const data = chartInstance.data as ExtendedChartData
 
   setOriginalData(data);
+  const visibles = data.datasets.map((_dataset, i) => chartInstance.getDatasetMeta(i)?.hidden ? 0 : 1 );
   const precision = getPrecision(pluginOptions);
-  data.calculatedData = calculateRate(data, isHorizontalChart(chartInstance), precision);
+  data.calculatedData = calculateRate(data, visibles, isHorizontalChart(chartInstance), precision);
   reflectData(data.calculatedData, data.datasets);
 }
 
