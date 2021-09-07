@@ -146,6 +146,62 @@ new Chart(document.getElementById("my-chart"), {
 });
 ```
 
+### Use with React
+
+```
+npx create-react-app demo-react
+cd demo-react
+chartjs-plugin-stacked100 --save
+```
+
+There has been a `src/global.d.ts` file created and add this to its content:
+
+```
+declare module 'chartjs-plugin-stacked100';
+
+declare module 'chartjs-plugin-stacked100'{
+    export function ChartjsPluginStacked100(): function
+}
+```
+
+Then use it:
+
+```
+import { Chart, Bar } from 'react-chartjs-2';
+import ChartjsPluginStacked100 from "chartjs-plugin-stacked100";
+
+Chart.register(ChartjsPluginStacked100);
+
+const ChartData = (props: any) => {
+    return <>
+    {
+      <div>
+        <Bar
+          type="bar"
+          data={{
+            labels: ["Foo", "Bar"],
+            datasets: [
+              { label: "bad", data: [5, 25], backgroundColor: "rgba(244, 143, 177, 0.6)" },
+              { label: "better", data: [15, 10], backgroundColor: "rgba(255, 235, 59, 0.6)" },
+              { label: "good", data: [10, 8], backgroundColor: "rgba(100, 181, 246, 0.6)" }]
+          }}
+          options={{
+            //@ts-ignore
+            indexAxis: "y",
+            plugins: {
+              stacked100: { enable: true }
+            }
+          }} />
+      </div>
+    }
+</>
+};
+export default ChartData
+
+```
+
+You can find a working example in [the demo-react folder](./demo-react/)
+
 ## Supported chart types
 
 * bar
