@@ -148,7 +148,7 @@ new Chart(document.getElementById("my-chart"), {
 
 ### Use with React
 
-```
+```bash
 npx create-react-app demo-react
 cd demo-react
 chartjs-plugin-stacked100 --save
@@ -156,7 +156,7 @@ chartjs-plugin-stacked100 --save
 
 There has been a `src/global.d.ts` file created and add this to its content:
 
-```
+```typescript
 declare module 'chartjs-plugin-stacked100';
 
 declare module 'chartjs-plugin-stacked100'{
@@ -166,7 +166,7 @@ declare module 'chartjs-plugin-stacked100'{
 
 Then use it:
 
-```
+```typescript
 import { Chart, Bar } from 'react-chartjs-2';
 import ChartjsPluginStacked100 from "chartjs-plugin-stacked100";
 
