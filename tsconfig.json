@@ -14,5 +14,5 @@
     "esModuleInterop": true,
   },
   "include": ["src"],
-  // "exclude": ["src/**/tests"],
+  "exclude": ["node_modules"],
 }
