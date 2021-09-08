@@ -209,7 +209,7 @@ export default ChartData
 
 ```
 
-You can find a working example in [the demo-react folder](./demo-react/)
+You can find a working example in [the demo-react folder](./src/demo-react/)
 
 ## Supported chart types
 
