@@ -151,10 +151,20 @@ new Chart(document.getElementById("my-chart"), {
 ```bash
 npx create-react-app demo-react
 cd demo-react
-chartjs-plugin-stacked100 --save
+npm install react-chartjs-2 chartjs-plugin-stacked100 --save
 ```
 
-There has been a `src/global.d.ts` file created and add this to its content:
+So that this is my list of chartjs related packages:
+```
+[mihamina@linux demo-react]$ npm list | grep chart
+demo-react@0.1.0 /home/mihamina/.../chartjs-plugin-stacked100/src/demo-react
+├─┬ chartjs-plugin-stacked100@1.0.1
+│ └── chart.js@3.5.1
+├─┬ react-chartjs-2@3.0.4
+
+```
+
+Still standing at your project root, create a `src/global.d.ts` file and add this to its content:
 
 ```typescript
 declare module 'chartjs-plugin-stacked100';
@@ -177,7 +187,6 @@ const ChartData = (props: any) => {
     {
       <div>
         <Bar
-          type="bar"
           data={{
             labels: ["Foo", "Bar"],
             datasets: [
