@@ -146,6 +146,71 @@ new Chart(document.getElementById("my-chart"), {
 });
 ```
 
+### Use with React
+
+```bash
+npx create-react-app demo-react
+cd demo-react
+npm install react-chartjs-2 chartjs-plugin-stacked100 --save
+```
+
+So that this is my list of chartjs related packages:
+```
+[mihamina@linux demo-react]$ npm list | grep chart
+demo-react@0.1.0 /home/mihamina/.../chartjs-plugin-stacked100/src/demo-react
+├─┬ chartjs-plugin-stacked100@1.0.1
+│ └── chart.js@3.5.1
+├─┬ react-chartjs-2@3.0.4
+
+```
+
+Still standing at your project root, create a `src/global.d.ts` file and add this to its content:
+
+```typescript
+declare module 'chartjs-plugin-stacked100';
+
+declare module 'chartjs-plugin-stacked100'{
+    export function ChartjsPluginStacked100(): function
+}
+```
+
+Then use it:
+
+```typescript
+import { Chart, Bar } from 'react-chartjs-2';
+import ChartjsPluginStacked100 from "chartjs-plugin-stacked100";
+
+Chart.register(ChartjsPluginStacked100);
+
+const ChartData = (props: any) => {
+    return <>
+    {
+      <div>
+        <Bar
+          data={{
+            labels: ["Foo", "Bar"],
+            datasets: [
+              { label: "bad", data: [5, 25], backgroundColor: "rgba(244, 143, 177, 0.6)" },
+              { label: "better", data: [15, 10], backgroundColor: "rgba(255, 235, 59, 0.6)" },
+              { label: "good", data: [10, 8], backgroundColor: "rgba(100, 181, 246, 0.6)" }]
+          }}
+          options={{
+            //@ts-ignore
+            indexAxis: "y",
+            plugins: {
+              stacked100: { enable: true }
+            }
+          }} />
+      </div>
+    }
+</>
+};
+export default ChartData
+
+```
+
+You can find a working example in [the demo-react folder](./src/demo-react/)
+
 ## Supported chart types
 
 * bar
