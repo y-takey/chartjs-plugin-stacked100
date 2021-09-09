@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "noImplicitAny": true,
-    // "outDir": "build/types",
+    "outDir": "build",
     "module": "esnext",
     "target": "es5",
     "allowJs": true,
     "sourceMap": true,
     "declaration": true,
-    "noEmit": true,
+    "emitDeclarationOnly": true,
     "suppressImplicitAnyIndexErrors": true,
     "lib": ["es2018", "dom"],
     "moduleResolution": "node",
