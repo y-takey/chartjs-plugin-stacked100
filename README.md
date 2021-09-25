@@ -35,7 +35,7 @@ Chart.register(ChartjsPluginStacked100);
 ```
 
 ```js
-Chart.register(ChartjsPluginStacked100);
+Chart.register(ChartjsPluginStacked100.default);
 ```
 
 ## Usage
