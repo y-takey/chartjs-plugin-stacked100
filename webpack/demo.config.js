@@ -9,7 +9,7 @@ module.exports = (env, args) => {
   return {
     ...commonConfig,
     devtool: isProduction && "source-map",
-    entry: "./src/demo/index.ts",
+    entry: "./examples/demo/index.ts",
     output: {
       path: path.resolve("./demo"),
       filename: "index.js"
@@ -23,7 +23,7 @@ module.exports = (env, args) => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: "./src/demo/index.html",
+        template: "./examples/demo/index.html",
         publicPath: "./",
         hash: true,
       }),

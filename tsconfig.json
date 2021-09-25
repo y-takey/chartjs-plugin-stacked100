@@ -13,6 +13,6 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
   },
-  "include": ["src"],
+  "include": ["src", "examples/demo"],
   "exclude": ["node_modules"],
 }

@@ -1,6 +1,6 @@
 import Chart from "chart.js/auto";
 
-import ChartPluginStacked100 from "../plugin";
+import ChartPluginStacked100 from "../../src/index";
 Chart.register(ChartPluginStacked100);
 
 const getCanvas = (id: string): HTMLCanvasElement => document.getElementById(id) as HTMLCanvasElement

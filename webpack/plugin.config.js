@@ -7,7 +7,7 @@ module.exports = {
   ...commonConfig,
   mode: "production",
   devtool: false,
-  entry: './src/plugin/index.ts',
+  entry: './src/index.ts',
   output: {
     filename: 'index.js',
     path: path.resolve('./build'),
