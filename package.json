@@ -7,12 +7,12 @@
   "scripts": {
     "start": "webpack serve --mode development --config ./webpack/demo.config.js",
     "build:demo": "webpack --mode production --config ./webpack/demo.config.js",
-    "build:plugin": "webpack --mode production --config ./webpack/plugin.config.js && yarn type",
-    "type": "yarn tsc src/plugin/*.ts --declaration --emitDeclarationOnly --outDir build --skipLibCheck",
-    "prepare": "yarn build:plugin",
+    "build:plugin": "webpack --mode production --config ./webpack/plugin.config.js",
+    "type": "yarn tsc src/*.ts --declaration --emitDeclarationOnly --outDir build --skipLibCheck",
+    "prepare": "yarn dev && yarn build:plugin",
     "gh": "yarn build:demo && gh-pages -d demo",
-    "dev": "yarn eslint && yarn tsc && yarn test",
-    "test": "jest --silent"
+    "dev": "yarn eslint && yarn type && yarn test",
+    "test": "jest --silent ./src/**"
   },
   "repository": {
     "type": "git",
