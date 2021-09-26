@@ -23,11 +23,18 @@ yarn-debug.log*
 yarn-error.log*
 
 # Development folders and files
+.github
+demo
+examples
 public
 src
+test
+webpack
 config
 .travis.yml
 README.md
 .eslintignore
 .eslintrc.json
+100%stacked-bar-chart.png
+jest.ocnfig.js
 webpack.config.js
