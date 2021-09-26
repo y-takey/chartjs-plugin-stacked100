@@ -4,7 +4,7 @@ import ChartjsPluginStacked100 from 'chartjs-plugin-stacked100';
 
 Chart.register(ChartjsPluginStacked100);
 
-const ChartData = () => (
+const ExampleChart = () => (
   <div>
     <Bar
       data={{
@@ -23,4 +23,4 @@ const ChartData = () => (
   </div>
 );
 
-export default ChartData
+export default ExampleChart
