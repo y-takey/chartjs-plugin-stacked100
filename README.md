@@ -56,14 +56,17 @@ new Chart(document.getElementById("my-chart"), {
   options: {
     tooltips: {
       callbacks: {
-        label: (tooltipItem, data) => {
+        label: (tooltipItem) => {
+          const data = tooltipItem.chart.data;
           const datasetIndex = tooltipItem.datasetIndex;
-          const datasetLabel = data.datasets[datasetIndex].label;
+          const index = tooltipItem.dataIndex;
+          const datasetLabel = data.datasets[datasetIndex].label || "";
           // You can use two type values.
           // `data.originalData` is raw values,
           // `data.calculatedData` is percentage values, e.g. 20.5 (The total value is 100.0)
-          const originalValue = data.originalData[datasetIndex][tooltipItem.index];
-          const rateValue = data.calculatedData[datasetIndex][tooltipItem.index];
+          const originalValue = data.originalData[datasetIndex][index];
+          const rateValue = data.calculatedData[datasetIndex][index];
+
           return `${datasetLabel}: ${rateValue}% (raw ${originalValue})`;
         }
       }
@@ -154,26 +157,6 @@ cd demo-react
 npm install react-chartjs-2 chartjs-plugin-stacked100 --save
 ```
 
-So that this is my list of chartjs related packages:
-```
-[mihamina@linux demo-react]$ npm list | grep chart
-demo-react@0.1.0 /home/mihamina/.../chartjs-plugin-stacked100/src/demo-react
-├─┬ chartjs-plugin-stacked100@1.0.1
-│ └── chart.js@3.5.1
-├─┬ react-chartjs-2@3.0.4
-
-```
-
-Still standing at your project root, create a `src/global.d.ts` file and add this to its content:
-
-```typescript
-declare module 'chartjs-plugin-stacked100';
-
-declare module 'chartjs-plugin-stacked100'{
-    export function ChartjsPluginStacked100(): function
-}
-```
-
 Then use it:
 
 ```typescript
@@ -206,10 +189,9 @@ const ChartData = (props: any) => {
 </>
 };
 export default ChartData
-
 ```
 
-You can find a working example in [the demo-react folder](./src/demo-react/)
+You can find a working example in [the demo-react folder](./examples/demo-react/)
 
 ## Supported chart types
 
