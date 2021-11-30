@@ -170,3 +170,21 @@ new Chart(getCanvas("my-chart-6"), {
     plugins,
   },
 });
+
+new Chart(getCanvas("my-chart-7"), {
+  type: "bar",
+  data: {
+    labels: ["Foo", "Bar"],
+    datasets: [
+      { label: "bad", data: [-5, 25], backgroundColor: "rgba(244, 143, 177, 0.6)" },
+      { label: "better", data: [15, -10], backgroundColor: "rgba(255, 235, 59, 0.6)" },
+      { label: "good", data: [10, 8], backgroundColor: "rgba(100, 181, 246, 0.6)" },
+    ],
+  },
+  options: {
+    indexAxis: "y",
+    plugins: {
+      stacked100: { enable: true, fixNegativeScale: true },
+    } as any,
+  },
+});

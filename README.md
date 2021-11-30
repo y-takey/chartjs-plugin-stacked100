@@ -38,6 +38,15 @@ Chart.register(ChartjsPluginStacked100);
 Chart.register(ChartjsPluginStacked100.default);
 ```
 
+## Options
+
+| Name                | Type    | Default | Description                                                                                                                      |
+| :------------------ | :------ | :------ | :------------------------------------------------------------------------------------------------------------------------------- |
+| enable              | boolean | -       |                                                                                                                                  |
+| replaceTooltipLabel | boolean | true    | replace tooltip label automatically.                                                                                             |
+| fixNegativeScale    | boolean | true    | when datasets has negative value and `fixNegativeScale` is `false`, the nagative scale is variable. (the range is `-100` - `-1`) |
+| precision           | number  | 1       | precision of percentage.                                                                                                         |
+
 ## Usage
 
 ### Basic
@@ -68,13 +77,13 @@ new Chart(document.getElementById("my-chart"), {
           const rateValue = data.calculatedData[datasetIndex][index];
 
           return `${datasetLabel}: ${rateValue}% (raw ${originalValue})`;
-        }
-      }
+        },
+      },
     },
     plugins: {
-      stacked100: { enable: true, replaceTooltipLabel: false }
-    }
-  }
+      stacked100: { enable: true, replaceTooltipLabel: false },
+    },
+  },
 });
 ```
 
@@ -82,7 +91,6 @@ new Chart(document.getElementById("my-chart"), {
 
 You can pass `precision` option. (default value is `1` )
 For example, when you pass `{ stacked100: { enable: true, precision: 3 } }`, the result is `0.123%` .
-
 
 #### Examples
 
@@ -94,15 +102,15 @@ new Chart(document.getElementById("my-chart"), {
     datasets: [
       { label: "bad", data: [5, 25], backgroundColor: "rgba(244, 143, 177, 0.6)" },
       { label: "better", data: [15, 10], backgroundColor: "rgba(255, 235, 59, 0.6)" },
-      { label: "good", data: [10, 8], backgroundColor: "rgba(100, 181, 246, 0.6)" }
-    ]
+      { label: "good", data: [10, 8], backgroundColor: "rgba(100, 181, 246, 0.6)" },
+    ],
   },
   options: {
     indexAxis: "y",
     plugins: {
-      stacked100: { enable: true }
-    }
-  }
+      stacked100: { enable: true },
+    },
+  },
 });
 ```
 
@@ -141,11 +149,11 @@ new Chart(document.getElementById("my-chart"), {
           const data = context.chart.data;
           const { datasetIndex, dataIndex } = context;
           return `${data.calculatedData[datasetIndex][dataIndex]}% (${data.originalData[datasetIndex][dataIndex]})`;
-        }
+        },
       },
-      stacked100: { enable: true }
-    }
-  }
+      stacked100: { enable: true },
+    },
+  },
 });
 ```
 
@@ -160,43 +168,47 @@ npm install react-chartjs-2 chartjs-plugin-stacked100 --save
 Then use it:
 
 ```typescript
-import { Chart, Bar } from 'react-chartjs-2';
+import { Chart, Bar } from "react-chartjs-2";
 import ChartjsPluginStacked100 from "chartjs-plugin-stacked100";
 
 Chart.register(ChartjsPluginStacked100);
 
 const ChartData = (props: any) => {
-    return <>
-    {
-      <div>
-        <Bar
-          data={{
-            labels: ["Foo", "Bar"],
-            datasets: [
-              { label: "bad", data: [5, 25], backgroundColor: "rgba(244, 143, 177, 0.6)" },
-              { label: "better", data: [15, 10], backgroundColor: "rgba(255, 235, 59, 0.6)" },
-              { label: "good", data: [10, 8], backgroundColor: "rgba(100, 181, 246, 0.6)" }]
-          }}
-          options={{
-            //@ts-ignore
-            indexAxis: "y",
-            plugins: {
-              stacked100: { enable: true }
-            }
-          }} />
-      </div>
-    }
-</>
+  return (
+    <>
+      {
+        <div>
+          <Bar
+            data={{
+              labels: ["Foo", "Bar"],
+              datasets: [
+                { label: "bad", data: [5, 25], backgroundColor: "rgba(244, 143, 177, 0.6)" },
+                { label: "better", data: [15, 10], backgroundColor: "rgba(255, 235, 59, 0.6)" },
+                { label: "good", data: [10, 8], backgroundColor: "rgba(100, 181, 246, 0.6)" },
+              ],
+            }}
+            options={{
+              //@ts-ignore
+              indexAxis: "y",
+              plugins: {
+                stacked100: { enable: true },
+              },
+            }}
+          />
+        </div>
+      }
+    </>
+  );
 };
-export default ChartData
+export default ChartData;
 ```
 
 You can find a working example in [the demo-react folder](./examples/demo-react/)
 
 ## Supported chart types
 
-* bar
-* line (via [@HoJSim](https://github.com/HoJSim), thanks!)
+- bar
+- line (via [@HoJSim](https://github.com/HoJSim), thanks!)
 
 ## Contributing
 
@@ -212,7 +224,7 @@ For bugs and feature requests, [please create an issue](https://github.com/y-tak
 
 ### Development
 
-* start dev server: `yarn start`
-* publish the plugin: `npm version (major|minor|patch) && npm publish`
-* check: `yarn dev`
-* deploy to github pages: `yarn gh`
+- start dev server: `yarn start`
+- publish the plugin: `npm version (major|minor|patch) && npm publish`
+- check: `yarn dev`
+- deploy to github pages: `yarn gh`

@@ -56,9 +56,16 @@ const isHorizontalChart = (chartInstance: Chart) => {
   return chartInstance.options.indexAxis === "y";
 };
 
+const getTickOption = (hasNegative: boolean, fixNegativeScale: boolean) => {
+  const baseOption = { max: 100 };
+  if (!hasNegative) return { min: 0, ...baseOption };
+  if (fixNegativeScale) return { min: -100, ...baseOption };
+  return baseOption;
+};
+
 export const beforeInit: ExtendedPlugin["beforeInit"] = (chartInstance, args, pluginOptions) => {
   if (!pluginOptions.enable) return;
-  const { replaceTooltipLabel = true } = pluginOptions;
+  const { replaceTooltipLabel = true, fixNegativeScale = true } = pluginOptions;
 
   const isHorizontal = isHorizontalChart(chartInstance);
   const targetAxis = isHorizontal ? "x" : "y";
@@ -66,7 +73,7 @@ export const beforeInit: ExtendedPlugin["beforeInit"] = (chartInstance, args, pl
     return dataset.data.some((value) => value < 0);
   });
   ["x", "y"].forEach((axis) => {
-    const tickOption = axis === targetAxis ? { min: hasNegative ? -100 : 0, max: 100 } : {};
+    const tickOption = axis === targetAxis ? getTickOption(hasNegative, fixNegativeScale) : {};
     const scaleOption = {
       stacked: true,
       ...tickOption,
