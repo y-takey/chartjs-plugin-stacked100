@@ -15,3 +15,10 @@ export interface PluginOptions {
   fixNegativeScale?: boolean;
   precision?: number;
 }
+
+declare module "chart.js" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  export interface PluginOptionsByType<TType extends ChartType> {
+    stacked100: PluginOptions;
+  }
+}

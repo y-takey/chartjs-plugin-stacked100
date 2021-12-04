@@ -185,6 +185,6 @@ new Chart(getCanvas("my-chart-7"), {
     indexAxis: "y",
     plugins: {
       stacked100: { enable: true, fixNegativeScale: true },
-    } as any,
+    },
   },
 });
