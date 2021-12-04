@@ -9,9 +9,9 @@
     "build:demo": "webpack --mode production --config ./webpack/demo.config.js",
     "build:plugin": "webpack --mode production --config ./webpack/plugin.config.js",
     "type": "yarn tsc src/*.ts --declaration --emitDeclarationOnly --outDir build --skipLibCheck",
-    "prepare": "yarn dev && yarn build:plugin",
+    "prepare": "yarn dev && yarn build:plugin && yarn type",
     "gh": "yarn build:demo && gh-pages -d demo",
-    "dev": "yarn eslint && yarn type && yarn test",
+    "dev": "yarn eslint && yarn test",
     "test": "jest --silent ./src/**"
   },
   "repository": {
