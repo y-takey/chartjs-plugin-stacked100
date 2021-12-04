@@ -3273,17 +3273,17 @@ char-regex@^1.0.2:
   resolved "https://registry.yarnpkg.com/char-regex/-/char-regex-1.0.2.tgz#d744358226217f981ed58f479b1d6bcc29545dcf"
   integrity sha512-kWWXztvZ5SBQV+eRgKFeh8q5sLuZY2+8WUIzlxWVTg+oGwY14qylx1KbKzHd8P6ZYkAg0xyIDU9JMHhyJMZ1jw==
 
-chart.js@^3.0.0:
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-3.5.1.tgz#73e24d23a4134a70ccdb5e79a917f156b6f3644a"
-  integrity sha512-m5kzt72I1WQ9LILwQC4syla/LD/N413RYv2Dx2nnTkRS9iv/ey1xLTt0DnPc/eWV4zI+BgEgDYBIzbQhZHc/PQ==
+chart.js@^3.6.0:
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-3.6.1.tgz#edcb6584b8d810306f655f89538c00a4f440c58e"
+  integrity sha512-AycnixR0I325Fp3bqQ7wRJbkIJPwz/9IZtUBvdBWMjK5+nKCy6FZ3VejkDTtB9udePEXNt1UYoGTsNL49JoIbg==
 
-chartjs-plugin-stacked100@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/chartjs-plugin-stacked100/-/chartjs-plugin-stacked100-1.0.3.tgz#28eaaad7df622dc11e2980004b8193c57c3d94dc"
-  integrity sha512-t8gNAdRrlrLR/vSeIs+bfSNkGaXu1XcWvO/8rK9xqxbCWxafGzVBYHCJhRdjBqRARLwMhe89rLyH+3G6HbASUA==
+chartjs-plugin-stacked100@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/chartjs-plugin-stacked100/-/chartjs-plugin-stacked100-1.1.1.tgz#ee57ffe8187568b2530b3c2edc0b58aec9ec695a"
+  integrity sha512-TCGdLwNR3ozCtCE8ah3lUVjo6/3s6Gz3LOTqWl2ULfzs+NOWADibwBf68NQzMv7XrHPwuowrxU2WphKknMWYjg==
   dependencies:
-    chart.js "^3.0.0"
+    chart.js "^3.6.0"
 
 check-types@^11.1.1:
   version "11.1.2"

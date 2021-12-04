@@ -10,7 +10,7 @@
     "@types/node": "^12.20.24",
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
-    "chartjs-plugin-stacked100": "^1.0.3",
+    "chartjs-plugin-stacked100": "^1.1.1",
     "react": "^17.0.2",
     "react-chartjs-2": "^3.0.4",
     "react-dom": "^17.0.2",
