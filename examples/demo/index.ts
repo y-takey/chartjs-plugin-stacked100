@@ -188,3 +188,21 @@ new Chart(getCanvas("my-chart-7"), {
     },
   },
 });
+
+new Chart(getCanvas("my-chart-8"), {
+  type: "bar",
+  data: {
+    labels: ["Foo", "Bar", "Baz", "Quuz"],
+    datasets: [
+      { label: "bad", data: [-5, 25], backgroundColor: "rgba(244, 143, 177, 0.6)" },
+      { label: "better", data: [15, -10, 6, 4], backgroundColor: "rgba(255, 235, 59, 0.6)" },
+      { label: "good", data: [10, 8, 11], backgroundColor: "rgba(100, 181, 246, 0.6)" },
+    ],
+  },
+  options: {
+    indexAxis: "y",
+    plugins: {
+      stacked100: { enable: true, fixNegativeScale: true },
+    },
+  },
+});

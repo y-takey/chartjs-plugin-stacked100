@@ -9,13 +9,16 @@ const calculateRate = (
   isHorizontal: boolean,
   precision: number,
 ) => {
-  const datasetDataLength = data?.datasets?.[0]?.data?.length || 0;
+  const datasetDataLength = data?.datasets?.reduce((longestLength, dataset) => {
+    const length = dataset?.data?.length || 0;
+    return length > longestLength ? length : longestLength;
+  }, 0) || 0;
 
   const totals = [...new Array(datasetDataLength)].map((el, i) => {
     return data.datasets.reduce((sum, dataset, j) => {
-      const key = dataset.stack;
+      const key = dataset.stack || "main";
       if (!sum[key]) sum[key] = 0;
-      sum[key] += Math.abs(dataValue(dataset.data[i], isHorizontal)) * visibles[j];
+      sum[key] += Math.abs(dataValue(dataset.data[i] || 0, isHorizontal)) * visibles[j];
 
       return sum;
     }, {});
@@ -23,7 +26,7 @@ const calculateRate = (
 
   return data.datasets.map((dataset) => {
     return dataset.data.map((val, j) => {
-      const total = totals[j][dataset.stack];
+      const total = totals[j][dataset.stack || "main"];
       const dv = dataValue(val, isHorizontal);
       return dv && total ? round(dv / total, precision) : 0;
     });
