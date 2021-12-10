@@ -3,6 +3,8 @@ import { Chart, ChartType, TooltipCallbacks, TooltipItem } from "chart.js";
 import { dataValue, setOriginalData, round, getPrecision } from "./utils";
 import { ExtendedChartData, ExtendedPlugin } from "./types";
 
+const defaultStackKey = Symbol();
+
 const calculateRate = (
   data: ExtendedChartData,
   visibles: number[],
@@ -16,7 +18,7 @@ const calculateRate = (
 
   const totals = [...new Array(datasetDataLength)].map((el, i) => {
     return data.datasets.reduce((sum, dataset, j) => {
-      const key = dataset.stack || "main";
+      const key = dataset.stack || defaultStackKey;
       if (!sum[key]) sum[key] = 0;
       sum[key] += Math.abs(dataValue(dataset.data[i] || 0, isHorizontal)) * visibles[j];
 
@@ -26,7 +28,7 @@ const calculateRate = (
 
   return data.datasets.map((dataset) => {
     return dataset.data.map((val, j) => {
-      const total = totals[j][dataset.stack || "main"];
+      const total = totals[j][dataset.stack || defaultStackKey];
       const dv = dataValue(val, isHorizontal);
       return dv && total ? round(dv / total, precision) : 0;
     });
