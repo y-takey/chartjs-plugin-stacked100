@@ -20,7 +20,7 @@ const calculateRate = (
     return data.datasets.reduce((sum, dataset, j) => {
       const key = dataset.stack || defaultStackKey;
       if (!sum[key]) sum[key] = 0;
-      sum[key] += Math.abs(dataValue(dataset.data[i] || 0, isHorizontal)) * visibles[j];
+      sum[key] += Math.abs(dataValue(dataset.data[i], isHorizontal) || 0) * visibles[j];
 
       return sum;
     }, {});
