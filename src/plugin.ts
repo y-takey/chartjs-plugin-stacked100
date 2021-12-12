@@ -75,7 +75,7 @@ export const beforeInit: ExtendedPlugin["beforeInit"] = (chartInstance, args, pl
   const isHorizontal = isHorizontalChart(chartInstance);
   const targetAxis = isHorizontal ? "x" : "y";
   const hasNegative = chartInstance.data.datasets.some((dataset) => {
-    return dataset.data.some((value) => value < 0);
+    return dataset.data.some((value) => (dataValue(value, isHorizontal) || 0) < 0);
   });
   ["x", "y"].forEach((axis) => {
     const tickOption = axis === targetAxis ? getTickOption(hasNegative, fixNegativeScale) : {};
