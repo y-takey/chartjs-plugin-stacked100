@@ -206,3 +206,46 @@ new Chart(getCanvas("my-chart-8"), {
     },
   },
 });
+
+new Chart(getCanvas("my-chart-9"), {
+  type: "bar",
+  data: {
+    labels: ["Foo", "Bar", "Baz", "Quuz"],
+    datasets: [
+      {
+        label: "bad",
+        data: [
+          { x: 0, y: -5 },
+          { x: 1, y: 25 },
+          { x: 2, y: undefined },
+          { x: 3, y: undefined },
+        ],
+        backgroundColor: "rgba(244, 143, 177, 0.6)",
+      },
+      {
+        label: "better",
+        data: [
+          { x: 0, y: 15 },
+          { x: 1, y: -10 },
+          { x: 2, y: 6 },
+          { x: 3, y: 4 },
+        ],
+        backgroundColor: "rgba(255, 235, 59, 0.6)",
+      },
+      {
+        label: "good",
+        data: [
+          { x: 0, y: 10 },
+          { x: 1, y: 8 },
+          { x: 2, y: 11 },
+          { x: 3, y: undefined },
+        ],
+        backgroundColor: "rgba(100, 181, 246, 0.6)",
+      },
+    ],
+  },
+  options: {
+    indexAxis: "x",
+    plugins,
+  },
+});
