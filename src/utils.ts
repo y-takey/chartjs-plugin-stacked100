@@ -32,9 +32,8 @@ export const getPrecision = (pluginOptions: PluginOptions): number => {
   // return the (validated) configured precision from pluginOptions or default 1
   const defaultPrecision = 1;
   if (!("precision" in pluginOptions)) return defaultPrecision;
-  if (!pluginOptions.precision) return defaultPrecision;
+  if (typeof pluginOptions.precision !== "number") return defaultPrecision;
   const optionsPrecision = Math.floor(pluginOptions.precision);
-  if (isNaN(optionsPrecision)) return defaultPrecision;
   if (optionsPrecision < 0 || optionsPrecision > 16) return defaultPrecision;
   return optionsPrecision;
 };
