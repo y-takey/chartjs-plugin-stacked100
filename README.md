@@ -45,6 +45,7 @@ Chart.register(ChartjsPluginStacked100.default);
 | enable              | boolean | -       |                                                                                                                                            |
 | replaceTooltipLabel | boolean | true    | replace tooltip label automatically.                                                                                                       |
 | fixNegativeScale    | boolean | true    | when datasets has negative value and `fixNegativeScale` is `false`, the nagative scale is variable. (the range is between `-100` and `-1`) |
+| individual          | boolean | false   | scale the highest bar to 100%, and the rest would be proportional to the highest bar of a stack.                                           |
 | precision           | number  | 1       | precision of percentage. the range is between `0` and `16`                                                                                 |
 
 ## Usage
