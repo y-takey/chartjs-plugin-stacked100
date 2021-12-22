@@ -11,10 +11,11 @@ const calculateRate = (
   isHorizontal: boolean,
   precision: number,
 ) => {
-  const datasetDataLength = data?.datasets?.reduce((longestLength, dataset) => {
-    const length = dataset?.data?.length || 0;
-    return length > longestLength ? length : longestLength;
-  }, 0) || 0;
+  const datasetDataLength =
+    data?.datasets?.reduce((longestLength, dataset) => {
+      const length = dataset?.data?.length || 0;
+      return length > longestLength ? length : longestLength;
+    }, 0) || 0;
 
   const totals = [...new Array(datasetDataLength)].map((el, i) => {
     return data.datasets.reduce((sum, dataset, j) => {
