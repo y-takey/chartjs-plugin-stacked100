@@ -10,6 +10,7 @@ const calculateRate = (
   visibles: number[],
   isHorizontal: boolean,
   precision: number,
+  individual: boolean,
 ) => {
   const datasetDataLength =
     data?.datasets?.reduce((longestLength, dataset) => {
@@ -21,7 +22,12 @@ const calculateRate = (
     return data.datasets.reduce((sum, dataset, j) => {
       const key = dataset.stack || defaultStackKey;
       if (!sum[key]) sum[key] = 0;
-      sum[key] += Math.abs(dataValue(dataset.data[i], isHorizontal) || 0) * visibles[j];
+      const value = Math.abs(dataValue(dataset.data[i], isHorizontal) || 0) * visibles[j];
+      if (individual) {
+        if (sum[key] < value) sum[key] = value;
+      } else {
+        sum[key] += value;
+      }
 
       return sum;
     }, {});
@@ -71,7 +77,7 @@ const getTickOption = (hasNegative: boolean, fixNegativeScale: boolean) => {
 
 export const beforeInit: ExtendedPlugin["beforeInit"] = (chartInstance, args, pluginOptions) => {
   if (!pluginOptions.enable) return;
-  const { replaceTooltipLabel = true, fixNegativeScale = true } = pluginOptions;
+  const { replaceTooltipLabel = true, fixNegativeScale = true, individual = false } = pluginOptions;
 
   const isHorizontal = isHorizontalChart(chartInstance);
   const targetAxis = isHorizontal ? "x" : "y";
@@ -81,7 +87,7 @@ export const beforeInit: ExtendedPlugin["beforeInit"] = (chartInstance, args, pl
   ["x", "y"].forEach((axis) => {
     const tickOption = axis === targetAxis ? getTickOption(hasNegative, fixNegativeScale) : {};
     const scaleOption = {
-      stacked: true,
+      stacked: !individual,
       ...tickOption,
       ...chartInstance.options.scales[axis],
     };
@@ -108,7 +114,13 @@ export const beforeUpdate: ExtendedPlugin["beforeUpdate"] = (
     chartInstance.getDatasetMeta(i)?.hidden ?? dataset.hidden ? 0 : 1,
   );
   const precision = getPrecision(pluginOptions);
-  data.calculatedData = calculateRate(data, visibles, isHorizontalChart(chartInstance), precision);
+  data.calculatedData = calculateRate(
+    data,
+    visibles,
+    isHorizontalChart(chartInstance),
+    precision,
+    pluginOptions.individual,
+  );
   reflectData(data.calculatedData, data.datasets);
 };
 

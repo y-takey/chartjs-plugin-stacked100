@@ -13,6 +13,7 @@ export interface PluginOptions {
   enable: boolean;
   replaceTooltipLabel?: boolean;
   fixNegativeScale?: boolean;
+  individual?: boolean;
   precision?: number;
 }
 
