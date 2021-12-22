@@ -103,8 +103,8 @@ export const beforeUpdate: ExtendedPlugin["beforeUpdate"] = (
   const data = chartInstance.data as ExtendedChartData;
 
   setOriginalData(data);
-  const visibles = data.datasets.map((_dataset, i) =>
-    chartInstance.getDatasetMeta(i)?.hidden ? 0 : 1,
+  const visibles = data.datasets.map((dataset, i) =>
+    chartInstance.getDatasetMeta(i)?.hidden ?? dataset.hidden ? 0 : 1,
   );
   const precision = getPrecision(pluginOptions);
   data.calculatedData = calculateRate(data, visibles, isHorizontalChart(chartInstance), precision);
