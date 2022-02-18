@@ -3,7 +3,7 @@ import { Chart, ChartType, TooltipCallbacks, TooltipItem, ChartData } from "char
 import { dataValue, setOriginalData, round, getPrecision } from "./utils";
 import { ExtendedChartData, ExtendedPlugin } from "./types";
 
-const defaultStackKey = Symbol();
+export const defaultStackKey = Symbol();
 
 export const summarizeValues = (
   datasets: ChartData["datasets"],
