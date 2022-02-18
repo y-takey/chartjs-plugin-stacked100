@@ -1,25 +1,24 @@
-import { Chart, ChartType, TooltipCallbacks, TooltipItem } from "chart.js";
+import { Chart, ChartType, TooltipCallbacks, TooltipItem, ChartData } from "chart.js";
 
 import { dataValue, setOriginalData, round, getPrecision } from "./utils";
 import { ExtendedChartData, ExtendedPlugin } from "./types";
 
 const defaultStackKey = Symbol();
 
-const calculateRate = (
-  data: ExtendedChartData,
+export const summarizeValues = (
+  datasets: ChartData["datasets"],
   visibles: number[],
   isHorizontal: boolean,
-  precision: number,
   individual: boolean,
 ) => {
   const datasetDataLength =
-    data?.datasets?.reduce((longestLength, dataset) => {
+    datasets?.reduce((longestLength, dataset) => {
       const length = dataset?.data?.length || 0;
       return length > longestLength ? length : longestLength;
     }, 0) || 0;
 
-  const totals = [...new Array(datasetDataLength)].map((el, i) => {
-    return data.datasets.reduce((sum, dataset, j) => {
+  return [...new Array(datasetDataLength)].map((el, i) => {
+    return datasets.reduce((sum, dataset, j) => {
       const key = dataset.stack || defaultStackKey;
       if (!sum[key]) sum[key] = 0;
       const value = Math.abs(dataValue(dataset.data[i], isHorizontal) || 0) * visibles[j];
@@ -32,6 +31,16 @@ const calculateRate = (
       return sum;
     }, {});
   });
+};
+
+const calculateRate = (
+  data: ExtendedChartData,
+  visibles: number[],
+  isHorizontal: boolean,
+  precision: number,
+  individual: boolean,
+) => {
+  const totals = summarizeValues(data?.datasets, visibles, isHorizontal, individual);
 
   return data.datasets.map((dataset) => {
     return dataset.data.map((val, j) => {
