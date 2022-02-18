@@ -225,7 +225,9 @@ For bugs and feature requests, [please create an issue](https://github.com/y-tak
 
 ### Development
 
+- install: `yarn install`
 - start dev server: `yarn start`
+- unit test: `yarn test:watch` or `yarn test`
 - publish the plugin: `npm version (major|minor|patch) && npm publish`
 - check: `yarn dev`
 - deploy to github pages: `yarn gh`

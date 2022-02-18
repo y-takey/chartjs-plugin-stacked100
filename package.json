@@ -12,7 +12,8 @@
     "prepare": "yarn dev && yarn build:plugin && yarn type",
     "gh": "yarn build:demo && gh-pages -d demo",
     "dev": "yarn eslint && yarn test",
-    "test": "jest --silent ./src/**"
+    "test": "jest --silent ./src/**",
+    "test:watch": "jest --watch ./src/**"
   },
   "repository": {
     "type": "git",
