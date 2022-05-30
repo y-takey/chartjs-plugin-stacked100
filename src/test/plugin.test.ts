@@ -29,21 +29,23 @@ describe("summarizeValues", () => {
       { stack: "a", data: [1, 8] },
       { stack: "a", data: [7, 2] },
       { stack: "b", data: [3, 6] },
-      { stack: "b", data: [5, 4] },
+      { stack: "b", data: [4, 9] },
     ];
 
     test("relative", () => {
       expect(summarizeValues(datasets, allVisibles, true, false)).toEqual([
-        { a: 1 + 7, b: 3 + 5 },
-        { a: 8 + 2, b: 6 + 4 },
+        { a: 1 + 7, b: 3 + 4 },
+        { a: 8 + 2, b: 6 + 9 },
       ]);
     });
 
     // TODO: for #59
     test("individual", () => {
-      expect(summarizeValues(datasets, allVisibles, true, false)).toEqual([
-        { a: Math.max(1, 7), b: Math.max(3, 5) },
-        { a: Math.max(8, 2), b: Math.max(6, 4) },
+      const group1Max = Math.max(1 + 7, 3 + 4);
+      const group2Max = Math.max(8 + 2, 6 + 9);
+      expect(summarizeValues(datasets, allVisibles, true, true)).toEqual([
+        { a: group1Max, b: group1Max },
+        { a: group2Max, b: group2Max },
       ]);
     });
   });

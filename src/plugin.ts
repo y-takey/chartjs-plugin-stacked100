@@ -17,12 +17,13 @@ export const summarizeValues = (
       return length > longestLength ? length : longestLength;
     }, 0) || 0;
 
-  return [...new Array(datasetDataLength)].map((el, i) => {
+  const isStack = datasets?.[0]?.stack;
+  const values = [...new Array(datasetDataLength)].map((el, i) => {
     return datasets.reduce((sum, dataset, j) => {
       const key = dataset.stack || defaultStackKey;
       if (!sum[key]) sum[key] = 0;
       const value = Math.abs(dataValue(dataset.data[i], isHorizontal) || 0) * visibles[j];
-      if (individual) {
+      if (individual && !isStack) {
         if (sum[key] < value) sum[key] = value;
       } else {
         sum[key] += value;
@@ -30,6 +31,13 @@ export const summarizeValues = (
 
       return sum;
     }, {});
+  });
+
+  if (!isStack || !individual) return values;
+  return values.map((rec) => {
+    const maxVal = Math.max(...(Object.values(rec) as number[]));
+    Object.keys(rec).forEach((key) => (rec[key] = maxVal));
+    return rec;
   });
 };
 

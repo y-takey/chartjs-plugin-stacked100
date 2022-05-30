@@ -283,3 +283,24 @@ createChart("Case.10 Relative percentage to maxium value", {
     },
   },
 });
+
+createChart("Case.11 Relative percentage with stack", {
+  type: "bar",
+  data: {
+    labels: ["Foo", "Bar"],
+    datasets: [
+      { label: "L1", stack: "Stack 0", data: [3, 2], backgroundColor: COLORS.red },
+      { label: "L2", stack: "Stack 0", data: [1, 1], backgroundColor: COLORS.yellow },
+      { label: "L1", stack: "Stack 1", data: [0, 3], backgroundColor: COLORS.blue },
+      { label: "L2", stack: "Stack 1", data: [1, 4], backgroundColor: COLORS.green },
+    ],
+  },
+  options: {
+    indexAxis: "y",
+    plugins: { stacked100: { enable: true, individual: true } },
+    scales: {
+      x: { stacked: true },
+      y: { stacked: true },
+    },
+  },
+});
