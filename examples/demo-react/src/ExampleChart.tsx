@@ -1,7 +1,8 @@
-import { Chart, Bar } from "react-chartjs-2";
+import { Chart, registerables } from "chart.js";
+import { Bar } from "react-chartjs-2";
 import ChartjsPluginStacked100 from "chartjs-plugin-stacked100";
 
-Chart.register(ChartjsPluginStacked100);
+Chart.register(...registerables, ChartjsPluginStacked100);
 
 const ExampleChart = () => (
   <div>

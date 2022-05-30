@@ -1,11 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import ExampleChart from './ExampleChart';
+import React from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import ExampleChart from "./ExampleChart";
 
-ReactDOM.render(
+const root = createRoot(document.getElementById("root")!);
+root.render(
   <React.StrictMode>
     <ExampleChart />
   </React.StrictMode>,
-  document.getElementById('root')
 );
