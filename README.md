@@ -2,7 +2,7 @@
 
 This plugin for Chart.js that makes your bar chart to 100% stacked bar chart.
 
-Requires **Chart.js 3.x**.
+Requires **Chart.js v3 or higher**.
 
 Demo: https://y-takey.github.io/chartjs-plugin-stacked100
 
