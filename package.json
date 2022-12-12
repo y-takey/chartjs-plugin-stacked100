@@ -28,14 +28,15 @@
     "url": "https://github.com/y-takey/chartjs-plugin-stacked100/issues"
   },
   "homepage": "https://github.com/y-takey/chartjs-plugin-stacked100#readme",
-  "dependencies": {
-    "chart.js": "^3.8.0"
+  "peerDependencies": {
+    "chart.js": ">=3.8.0"
   },
   "devDependencies": {
     "@types/chart.js": "^2.9.37",
     "@types/jest": "^29.2.4",
     "@typescript-eslint/eslint-plugin": "^5.46.0",
     "@typescript-eslint/parser": "^5.46.0",
+    "chart.js": "^4.0.1",
     "eslint": "^8.29.0",
     "gh-pages": "^4.0.0",
     "html-webpack-plugin": "^5.5.0",
