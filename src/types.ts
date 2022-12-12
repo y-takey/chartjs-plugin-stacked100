@@ -1,10 +1,10 @@
-import { Plugin, ChartType, ChartData, ScatterDataPoint } from "chart.js";
+import { Plugin, ChartType, ChartData } from "chart.js";
 
-type PluginDataPoint = number | ScatterDataPoint;
+type PluginDataPoint = ChartData["datasets"][0]["data"];
 
 export type ExtendedChartData = ChartData & {
   calculatedData?: number[][];
-  originalData?: PluginDataPoint[][];
+  originalData?: PluginDataPoint[];
 };
 
 export type ExtendedPlugin = Plugin<ChartType, PluginOptions>;
@@ -20,6 +20,6 @@ export interface PluginOptions {
 declare module "chart.js" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   export interface PluginOptionsByType<TType extends ChartType> {
-    stacked100: PluginOptions;
+    stacked100?: PluginOptions;
   }
 }
