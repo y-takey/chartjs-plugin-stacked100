@@ -8,11 +8,11 @@
     "sourceMap": true,
     "declaration": true,
     "emitDeclarationOnly": true,
-    "suppressImplicitAnyIndexErrors": true,
+    "ignoreDeprecations": "5.0",
     "lib": ["es2018", "dom"],
     "moduleResolution": "node",
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
   "include": ["src", "examples/demo"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules"]
 }

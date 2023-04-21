@@ -30,7 +30,7 @@ export const summarizeValues = (
       }
 
       return sum;
-    }, {});
+    }, {} as { [key: string | symbol]: number });
   });
 
   if (!isStack || !individual) return values;
