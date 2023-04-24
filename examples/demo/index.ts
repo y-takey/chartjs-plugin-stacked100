@@ -304,3 +304,86 @@ createChart("Case.11 Relative percentage with stack", {
     },
   },
 });
+
+createChart("Case.12 Multiple axis(combo horizontal bar/line)", {
+  type: "bar",
+  data: {
+    labels: ["Foo", "Bar"],
+    datasets: [
+      {
+        label: "bad",
+        data: [5, 25],
+        backgroundColor: COLORS.red,
+        stack: "stack1",
+        xAxisID: "axis1",
+      },
+      {
+        label: "better",
+        data: [15, 10],
+        backgroundColor: COLORS.yellow,
+        stack: "stack1",
+        xAxisID: "axis1",
+      },
+      {
+        type: "line",
+        label: "good",
+        data: [43, 24],
+        backgroundColor: COLORS.blue,
+        xAxisID: "axis2",
+      },
+    ],
+  },
+  options: {
+    indexAxis: "y",
+    plugins: { stacked100: { enable: true, axisId: "axis1" } },
+    scales: {
+      axis1: {
+        position: "top",
+      },
+      axis2: {
+        position: "bottom",
+      },
+    },
+  },
+});
+
+createChart("Case.13 Multiple axis(combo vertical bar/line)", {
+  type: "bar",
+  data: {
+    labels: ["Foo", "Bar"],
+    datasets: [
+      {
+        label: "bad",
+        data: [5, 25],
+        backgroundColor: COLORS.red,
+        stack: "stack1",
+        yAxisID: "axis1",
+      },
+      {
+        label: "better",
+        data: [15, 10],
+        backgroundColor: COLORS.yellow,
+        stack: "stack1",
+        yAxisID: "axis1",
+      },
+      {
+        type: "line",
+        label: "good",
+        data: [43, 24],
+        backgroundColor: COLORS.blue,
+        yAxisID: "axis2",
+      },
+    ],
+  },
+  options: {
+    plugins: { stacked100: { enable: true, axisId: "axis1" } },
+    scales: {
+      axis1: {
+        position: "left",
+      },
+      axis2: {
+        position: "right",
+      },
+    },
+  },
+});

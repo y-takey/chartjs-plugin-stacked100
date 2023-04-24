@@ -6,6 +6,8 @@ Requires **Chart.js v3 or higher**.
 
 Demo: https://y-takey.github.io/chartjs-plugin-stacked100
 
+![Result image](https://raw.githubusercontent.com/y-takey/chartjs-plugin-stacked100/master/100%25stacked-bar-chart.png)
+
 ## Installation
 
 ### npm
@@ -40,13 +42,14 @@ Chart.register(ChartjsPluginStacked100.default);
 
 ## Options
 
-| Name                | Type    | Default | Description                                                                                                                                |
-| :------------------ | :------ | :------ | :----------------------------------------------------------------------------------------------------------------------------------------- |
-| enable              | boolean | -       |                                                                                                                                            |
-| replaceTooltipLabel | boolean | true    | replace tooltip label automatically.                                                                                                       |
-| fixNegativeScale    | boolean | true    | when datasets has negative value and `fixNegativeScale` is `false`, the nagative scale is variable. (the range is between `-100` and `-1`) |
-| individual          | boolean | false   | scale the highest bar to 100%, and the rest would be proportional to the highest bar of a stack.                                           |
-| precision           | number  | 1       | precision of percentage. the range is between `0` and `16`                                                                                 |
+| Name                | Type    | Default | Description                                                                                                                                 |
+| :------------------ | :------ | :------ | :------------------------------------------------------------------------------------------------------------------------------------------ |
+| enable              | boolean | false   |                                                                                                                                             |
+| replaceTooltipLabel | boolean | true    | replace tooltip label automatically.                                                                                                        |
+| fixNegativeScale    | boolean | true    | when datasets has negative value and `fixNegativeScale` is `false`, the nagative scale is variable. (the range is between `-100` and `-1`)  |
+| individual          | boolean | false   | scale the highest bar to 100%, and the rest would be proportional to the highest bar of a stack.                                            |
+| precision           | number  | 1       | precision of percentage. the range is between `0` and `16`                                                                                  |
+| axisId              | string  | -       | This option allows you to stack only the axis in a chart that includes multiple axes. By default, the plugin will attempt to stack all axes |
 
 ## Usage
 
@@ -114,8 +117,6 @@ new Chart(document.getElementById("my-chart"), {
   },
 });
 ```
-
-![Result image](https://raw.githubusercontent.com/y-takey/chartjs-plugin-stacked100/master/100%25stacked-bar-chart.png)
 
 #### Datapoints can be Objects
 

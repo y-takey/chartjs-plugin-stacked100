@@ -41,25 +41,42 @@ export const summarizeValues = (
   });
 };
 
+const isTargetDataset = (dataset: ChartData["datasets"][0], targetAxisId?: string) => {
+  if (!targetAxisId) return true;
+
+  // FIXME: avoid type error without any cast.
+  const axisId = (dataset as any).xAxisID || (dataset as any).yAxisID;
+  return axisId === targetAxisId;
+};
+
 const calculateRate = (
   data: ExtendedChartData,
   visibles: number[],
   isHorizontal: boolean,
   precision: number,
   individual: boolean,
+  targetAxisId?: string,
 ) => {
   const totals = summarizeValues(data?.datasets, visibles, isHorizontal, individual);
 
   return data.datasets.map((dataset) => {
+    const isTarget = isTargetDataset(dataset, targetAxisId);
+
     return dataset.data.map((val, j) => {
-      const total = totals[j][dataset.stack || defaultStackKey];
       const dv = dataValue(val, isHorizontal);
+      if (!isTarget) return dv;
+
+      const total = totals[j][dataset.stack || defaultStackKey];
+
       return dv && total ? round(dv / total, precision) : 0;
     });
   });
 };
 
-const tooltipLabel = (isHorizontal: boolean): TooltipCallbacks<ChartType>["label"] => {
+const tooltipLabel = (
+  isHorizontal: boolean,
+  targetAxisId?: string,
+): TooltipCallbacks<ChartType>["label"] => {
   return (tooltipItem: TooltipItem<ChartType>) => {
     const data = tooltipItem.chart.data as ExtendedChartData;
     const datasetIndex = tooltipItem.datasetIndex;
@@ -69,6 +86,9 @@ const tooltipLabel = (isHorizontal: boolean): TooltipCallbacks<ChartType>["label
     const rateValue = data.calculatedData[datasetIndex][index];
     const value = dataValue(originalValue, isHorizontal);
 
+    if (!isTargetDataset(data.datasets[datasetIndex], targetAxisId)) {
+      return `${datasetLabel}: ${rateValue}`;
+    }
     return `${datasetLabel}: ${rateValue}% (${value})`;
   };
 };
@@ -92,6 +112,20 @@ const getTickOption = (hasNegative: boolean, fixNegativeScale: boolean) => {
   return baseOption;
 };
 
+const setScaleOption = (
+  chartInstance: Chart,
+  axisId: string,
+  stacked: boolean,
+  tickOption: Record<string, any>,
+) => {
+  const scaleOption = {
+    stacked,
+    ...tickOption,
+    ...chartInstance.options.scales[axisId],
+  };
+  chartInstance.options.scales[axisId] = scaleOption;
+};
+
 export const beforeInit: ExtendedPlugin["beforeInit"] = (chartInstance, args, pluginOptions) => {
   if (!pluginOptions.enable) return;
   const { replaceTooltipLabel = true, fixNegativeScale = true, individual = false } = pluginOptions;
@@ -101,20 +135,22 @@ export const beforeInit: ExtendedPlugin["beforeInit"] = (chartInstance, args, pl
   const hasNegative = chartInstance.data.datasets.some((dataset) => {
     return dataset.data.some((value) => (dataValue(value, isHorizontal) || 0) < 0);
   });
-  ["x", "y"].forEach((axis) => {
-    const tickOption = axis === targetAxis ? getTickOption(hasNegative, fixNegativeScale) : {};
-    const scaleOption = {
-      stacked: !individual,
-      ...tickOption,
-      ...chartInstance.options.scales[axis],
-    };
-    chartInstance.options.scales[axis] = scaleOption;
-  });
+  const tickOption = getTickOption(hasNegative, fixNegativeScale);
+  if (pluginOptions.axisId) {
+    setScaleOption(chartInstance, pluginOptions.axisId, !individual, tickOption);
+  } else {
+    ["x", "y"].forEach((axis) => {
+      setScaleOption(chartInstance, axis, !individual, axis === targetAxis ? tickOption : {});
+    });
+  }
 
   // Replace tooltips
   if (!replaceTooltipLabel) return;
 
-  chartInstance.options.plugins.tooltip.callbacks.label = tooltipLabel(isHorizontal);
+  chartInstance.options.plugins.tooltip.callbacks.label = tooltipLabel(
+    isHorizontal,
+    pluginOptions.axisId,
+  );
 };
 
 export const beforeUpdate: ExtendedPlugin["beforeUpdate"] = (
@@ -137,6 +173,7 @@ export const beforeUpdate: ExtendedPlugin["beforeUpdate"] = (
     isHorizontalChart(chartInstance),
     precision,
     pluginOptions.individual,
+    pluginOptions.axisId,
   );
   reflectData(data.calculatedData, data.datasets);
 };

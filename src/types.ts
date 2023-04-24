@@ -15,6 +15,7 @@ export interface PluginOptions {
   fixNegativeScale?: boolean;
   individual?: boolean;
   precision?: number;
+  axisId?: string;
 }
 
 declare module "chart.js" {
