@@ -78,7 +78,7 @@ const tooltipLabel = (
   targetAxisId?: string,
 ): TooltipCallbacks<ChartType>["label"] => {
   return (tooltipItem: TooltipItem<ChartType>) => {
-    const data = tooltipItem.chart.data as ExtendedChartData;
+    const data = tooltipItem.chart.data;
     const datasetIndex = tooltipItem.datasetIndex;
     const index = tooltipItem.dataIndex;
     const datasetLabel = data.datasets[datasetIndex].label || "";
@@ -160,7 +160,7 @@ export const beforeUpdate: ExtendedPlugin["beforeUpdate"] = (
 ) => {
   if (!pluginOptions.enable) return;
 
-  const data = chartInstance.data as ExtendedChartData;
+  const data = chartInstance.data;
 
   setOriginalData(data);
   const visibles = data.datasets.map((dataset, i) =>
@@ -181,7 +181,7 @@ export const beforeUpdate: ExtendedPlugin["beforeUpdate"] = (
 export const afterUpdate: ExtendedPlugin["afterUpdate"] = (chartInstance, _args, pluginOptions) => {
   if (!pluginOptions.enable) return;
 
-  const data = chartInstance.data as ExtendedChartData;
+  const data = chartInstance.data;
 
   reflectData(data.originalData, data.datasets);
 };

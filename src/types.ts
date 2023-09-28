@@ -1,11 +1,6 @@
-import { Plugin, ChartType, ChartData } from "chart.js";
+import { Plugin, ChartType, ChartData, DefaultDataPoint } from "chart.js";
 
 type PluginDataPoint = ChartData["datasets"][0]["data"];
-
-export type ExtendedChartData = ChartData & {
-  calculatedData?: number[][];
-  originalData?: PluginDataPoint[];
-};
 
 export type ExtendedPlugin = Plugin<ChartType, PluginOptions>;
 
@@ -18,9 +13,21 @@ export interface PluginOptions {
   axisId?: string;
 }
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 declare module "chart.js" {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface ChartData<
+    TType extends ChartType = ChartType,
+    TData = DefaultDataPoint<TType>,
+    TLabel = unknown,
+  > {
+    calculatedData?: number[][];
+    originalData?: PluginDataPoint[];
+  }
+
   export interface PluginOptionsByType<TType extends ChartType> {
     stacked100?: PluginOptions;
   }
 }
+/* eslint-enable @typescript-eslint/no-unused-vars */
+
+export type ExtendedChartData = ChartData;
