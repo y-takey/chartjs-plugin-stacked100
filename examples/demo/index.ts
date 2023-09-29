@@ -387,3 +387,42 @@ createChart("Case.13 Multiple axis(combo vertical bar/line)", {
     },
   },
 });
+
+createChart("Case.14 horizontal bar chart with parsing option", {
+  type: "bar",
+  data: {
+    labels: ["Foo", "Bar"],
+    datasets: [
+      {
+        label: "bad",
+        data: [
+          { foo: 5, bar: "Foo" },
+          { foo: 25, bar: "Bar" },
+        ],
+        backgroundColor: COLORS.red,
+      },
+      {
+        label: "better",
+        data: [
+          { foo: 15, bar: "Foo" },
+          { foo: 10, bar: "Bar" },
+        ],
+        backgroundColor: COLORS.yellow,
+      },
+      {
+        label: "good",
+        data: [
+          { foo2: 10, bar2: "Foo" },
+          { foo2: 8, bar2: "Bar" },
+        ],
+        parsing: { xAxisKey: "foo2", yAxisKey: "bar2" },
+        backgroundColor: COLORS.blue,
+      },
+    ] as any,
+  },
+  options: {
+    indexAxis: "y",
+    parsing: { xAxisKey: "foo", yAxisKey: "bar" },
+    plugins: { stacked100: { enable: true } },
+  },
+});

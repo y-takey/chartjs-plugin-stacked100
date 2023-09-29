@@ -1,3 +1,4 @@
+import { ParsingOptions } from "chart.js";
 import { ExtendedChartData, PluginOptions } from "./types";
 
 export const isObject = (obj: any) => {
@@ -5,9 +6,18 @@ export const isObject = (obj: any) => {
   return type === "object" && !!obj;
 };
 
-export const dataValue = (dataPoint: any, isHorizontal: boolean) => {
+const getAxisKey = (parsing: ParsingOptions["parsing"], defaultKey: "x" | "y") => {
+  return (parsing && parsing[`${defaultKey}AxisKey`]) || defaultKey;
+};
+
+export const dataValue = (
+  dataPoint: any,
+  isHorizontal: boolean,
+  parsing: ParsingOptions["parsing"],
+) => {
   if (isObject(dataPoint)) {
-    return isHorizontal ? dataPoint.x : dataPoint.y;
+    const axisKey = getAxisKey(parsing, isHorizontal ? "x" : "y");
+    return dataPoint[axisKey];
   }
 
   return dataPoint;

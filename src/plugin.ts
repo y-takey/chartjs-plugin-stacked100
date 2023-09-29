@@ -1,4 +1,11 @@
-import { Chart, ChartType, TooltipCallbacks, TooltipItem, ChartData } from "chart.js";
+import {
+  Chart,
+  ChartType,
+  TooltipCallbacks,
+  TooltipItem,
+  ChartData,
+  ParsingOptions,
+} from "chart.js";
 
 import { dataValue, setOriginalData, round, getPrecision } from "./utils";
 import { ExtendedChartData, ExtendedPlugin } from "./types";
@@ -10,6 +17,7 @@ export const summarizeValues = (
   visibles: number[],
   isHorizontal: boolean,
   individual: boolean,
+  parsing?: ParsingOptions["parsing"],
 ) => {
   const datasetDataLength =
     datasets?.reduce((longestLength, dataset) => {
@@ -22,7 +30,9 @@ export const summarizeValues = (
     return datasets.reduce((sum, dataset, j) => {
       const key = dataset.stack || defaultStackKey;
       if (!sum[key]) sum[key] = 0;
-      const value = Math.abs(dataValue(dataset.data[i], isHorizontal) || 0) * visibles[j];
+      const value =
+        Math.abs(dataValue(dataset.data[i], isHorizontal, dataset.parsing || parsing) || 0) *
+        visibles[j];
       if (individual && !isStack) {
         if (sum[key] < value) sum[key] = value;
       } else {
@@ -56,14 +66,15 @@ const calculateRate = (
   precision: number,
   individual: boolean,
   targetAxisId?: string,
+  parsing?: ParsingOptions["parsing"],
 ) => {
-  const totals = summarizeValues(data?.datasets, visibles, isHorizontal, individual);
+  const totals = summarizeValues(data?.datasets, visibles, isHorizontal, individual, parsing);
 
   return data.datasets.map((dataset) => {
     const isTarget = isTargetDataset(dataset, targetAxisId);
 
     return dataset.data.map((val, j) => {
-      const dv = dataValue(val, isHorizontal);
+      const dv = dataValue(val, isHorizontal, dataset.parsing || parsing);
       if (!isTarget) return dv;
 
       const total = totals[j][dataset.stack || defaultStackKey];
@@ -84,7 +95,11 @@ const tooltipLabel = (
     const datasetLabel = data.datasets[datasetIndex].label || "";
     const originalValue = data.originalData[datasetIndex][index];
     const rateValue = data.calculatedData[datasetIndex][index];
-    const value = dataValue(originalValue, isHorizontal);
+    const value = dataValue(
+      originalValue,
+      isHorizontal,
+      data.datasets[datasetIndex].parsing || tooltipItem.chart.options.parsing,
+    );
 
     if (!isTargetDataset(data.datasets[datasetIndex], targetAxisId)) {
       return `${datasetLabel}: ${rateValue}`;
@@ -133,7 +148,10 @@ export const beforeInit: ExtendedPlugin["beforeInit"] = (chartInstance, args, pl
   const isHorizontal = isHorizontalChart(chartInstance);
   const targetAxis = isHorizontal ? "x" : "y";
   const hasNegative = chartInstance.data.datasets.some((dataset) => {
-    return dataset.data.some((value) => (dataValue(value, isHorizontal) || 0) < 0);
+    return dataset.data.some(
+      (value) =>
+        (dataValue(value, isHorizontal, dataset.parsing || chartInstance.options.parsing) || 0) < 0,
+    );
   });
   const tickOption = getTickOption(hasNegative, fixNegativeScale);
   if (pluginOptions.axisId) {
@@ -174,6 +192,7 @@ export const beforeUpdate: ExtendedPlugin["beforeUpdate"] = (
     precision,
     pluginOptions.individual,
     pluginOptions.axisId,
+    chartInstance.options.parsing,
   );
   reflectData(data.calculatedData, data.datasets);
 };
