@@ -8,6 +8,7 @@ module.exports = {
   mode: "production",
   devtool: false,
   entry: "./src/index.ts",
+  target: "node",
   output: {
     filename: "index.js",
     path: path.resolve("./build"),
