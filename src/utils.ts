@@ -1,7 +1,7 @@
 import { ParsingOptions } from "chart.js";
 import { ExtendedChartData, PluginOptions } from "./types";
 
-export const isObject = (obj: any) => {
+export const isObject = (obj: any): obj is Record<string, any> => {
   const type = typeof obj;
   return type === "object" && !!obj;
 };

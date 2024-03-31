@@ -7,32 +7,50 @@ import {
   ParsingOptions,
 } from "chart.js";
 
-import { dataValue, setOriginalData, round, getPrecision } from "./utils";
+import { dataValue, setOriginalData, round, getPrecision, isObject } from "./utils";
 import { ExtendedChartData, ExtendedPlugin } from "./types";
 
 export const defaultStackKey = Symbol();
 
+const getDataIndex = (
+  labels: unknown[],
+  data: unknown,
+  parsing: ParsingOptions["parsing"],
+  isHorizontal: boolean,
+  srcIndex: number,
+) => {
+  if (!isObject(data)) return srcIndex;
+
+  const axis = isHorizontal ? "y" : "x";
+  const parseKey = parsing && parsing[`${axis}AxisKey`];
+  if (!parseKey) return srcIndex;
+  const label = data[parseKey];
+  if (!label) return srcIndex;
+  const labelIndex = labels.findIndex((l) => l === label);
+
+  return labelIndex < 0 ? srcIndex : labelIndex;
+};
+
 export const summarizeValues = (
-  datasets: ChartData["datasets"],
+  chartData: ChartData,
   visibles: number[],
   isHorizontal: boolean,
   individual: boolean,
   parsing?: ParsingOptions["parsing"],
 ) => {
-  const datasetDataLength =
-    datasets?.reduce((longestLength, dataset) => {
-      const length = dataset?.data?.length || 0;
-      return length > longestLength ? length : longestLength;
-    }, 0) || 0;
+  const { labels, datasets } = chartData;
+  const datasetDataLength = labels.length;
 
   const isStack = datasets?.[0]?.stack;
   const values = [...new Array(datasetDataLength)].map((el, i) => {
     return datasets.reduce((sum, dataset, j) => {
+      const parsingOptions = dataset.parsing || parsing;
       const key = dataset.stack || defaultStackKey;
+      const rec = dataset.data.find((ds, index) => {
+        return getDataIndex(labels, ds, parsingOptions, isHorizontal, index) == i;
+      });
       if (!sum[key]) sum[key] = 0;
-      const value =
-        Math.abs(dataValue(dataset.data[i], isHorizontal, dataset.parsing || parsing) || 0) *
-        visibles[j];
+      const value = Math.abs(dataValue(rec, isHorizontal, parsingOptions) || 0) * visibles[j];
       if (individual && !isStack) {
         if (sum[key] < value) sum[key] = value;
       } else {
@@ -68,19 +86,26 @@ const calculateRate = (
   targetAxisId?: string,
   parsing?: ParsingOptions["parsing"],
 ) => {
-  const totals = summarizeValues(data?.datasets, visibles, isHorizontal, individual, parsing);
+  const totals = summarizeValues(data, visibles, isHorizontal, individual, parsing);
 
   return data.datasets.map((dataset) => {
     const isTarget = isTargetDataset(dataset, targetAxisId);
 
-    return dataset.data.map((val, j) => {
-      const dv = dataValue(val, isHorizontal, dataset.parsing || parsing);
-      if (!isTarget) return dv;
+    const ret = new Array(data.labels.length);
+    dataset.data.forEach((val, j) => {
+      const parsingOptions = dataset.parsing || parsing;
+      const dv = dataValue(val, isHorizontal, parsingOptions);
+      const dataIndex = getDataIndex(data.labels, val, parsingOptions, isHorizontal, j);
+      if (isTarget) {
+        const key = dataset.stack || defaultStackKey;
+        const total = totals[dataIndex][key];
 
-      const total = totals[j][dataset.stack || defaultStackKey];
-
-      return dv && total ? round(dv / total, precision) : 0;
+        ret[dataIndex] = dv && total ? round(dv / total, precision) : 0;
+      } else {
+        ret[dataIndex] = dv;
+      }
     });
+    return ret;
   });
 };
 
@@ -93,13 +118,12 @@ const tooltipLabel = (
     const datasetIndex = tooltipItem.datasetIndex;
     const index = tooltipItem.dataIndex;
     const datasetLabel = data.datasets[datasetIndex].label || "";
-    const originalValue = data.originalData[datasetIndex][index];
-    const rateValue = data.calculatedData[datasetIndex][index];
-    const value = dataValue(
-      originalValue,
-      isHorizontal,
-      data.datasets[datasetIndex].parsing || tooltipItem.chart.options.parsing,
+    const parsing = data.datasets[datasetIndex].parsing || tooltipItem.chart.options.parsing;
+    const originalValue = data.originalData[datasetIndex].find(
+      (rec, i) => getDataIndex(data.labels, rec, parsing, isHorizontal, i) == index,
     );
+    const rateValue = data.calculatedData[datasetIndex][index];
+    const value = dataValue(originalValue, isHorizontal, parsing);
 
     if (!isTargetDataset(data.datasets[datasetIndex], targetAxisId)) {
       return `${datasetLabel}: ${rateValue}`;

@@ -426,3 +426,49 @@ createChart("Case.14 horizontal bar chart with parsing option", {
     plugins: { stacked100: { enable: true } },
   },
 });
+
+createChart("Case.15 Complex parsing options", {
+  type: "bar",
+  data: {
+    labels: ["Alice", "Bob"],
+    datasets: [
+      {
+        label: "bad",
+        data: [{ count: 1, user: "Alice" }],
+        backgroundColor: COLORS.red,
+        parsing: {
+          xAxisKey: "user",
+          yAxisKey: "count",
+        },
+      },
+      {
+        label: "better",
+        data: [{ count: 2, user: "Bob" }],
+        backgroundColor: COLORS.yellow,
+        parsing: {
+          xAxisKey: "user",
+          yAxisKey: "count",
+        },
+      },
+      {
+        label: "good",
+        data: [
+          { count: 3, user: "Alice" },
+          { count: 1, user: "Bob" },
+        ],
+        backgroundColor: COLORS.blue,
+        parsing: {
+          xAxisKey: "user",
+          yAxisKey: "count",
+        },
+      },
+    ],
+  },
+  options: {
+    plugins: {
+      stacked100: {
+        enable: true,
+      },
+    },
+  },
+} as any);
