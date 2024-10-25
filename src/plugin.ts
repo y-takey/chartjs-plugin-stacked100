@@ -7,7 +7,15 @@ import {
   ParsingOptions,
 } from "chart.js";
 
-import { dataValue, setOriginalData, round, getPrecision, isObject } from "./utils";
+import {
+  dataValue,
+  setOriginalData,
+  roundOff,
+  roundDown,
+  roundUp,
+  getPrecision,
+  isObject,
+} from "./utils";
 import { ExtendedChartData, ExtendedPlugin } from "./types";
 
 export const defaultStackKey = Symbol();
@@ -83,10 +91,18 @@ const calculateRate = (
   isHorizontal: boolean,
   precision: number,
   individual: boolean,
+  roundOption: "off" | "down" | "up" = "off",
   targetAxisId?: string,
   parsing?: ParsingOptions["parsing"],
 ) => {
   const totals = summarizeValues(data, visibles, isHorizontal, individual, parsing);
+
+  const round =
+    roundOption === "off"
+      ? roundOff
+      : roundOption === "down"
+        ? roundDown
+        : roundUp;
 
   return data.datasets.map((dataset) => {
     const isTarget = isTargetDataset(dataset, targetAxisId);
@@ -215,6 +231,7 @@ export const beforeUpdate: ExtendedPlugin["beforeUpdate"] = (
     isHorizontalChart(chartInstance),
     precision,
     pluginOptions.individual,
+    pluginOptions.roundOption,
     pluginOptions.axisId,
     chartInstance.options.parsing,
   );

@@ -9,6 +9,7 @@ export interface PluginOptions {
   replaceTooltipLabel?: boolean;
   fixNegativeScale?: boolean;
   individual?: boolean;
+  roundOption?: "off" | "down" | "up";
   precision?: number;
   axisId?: string;
 }

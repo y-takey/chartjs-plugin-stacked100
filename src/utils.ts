@@ -33,9 +33,19 @@ export const setOriginalData = (data: ExtendedChartData) => {
   });
 };
 
-export const round = (value: number, precision: number): number => {
+export const roundOff = (value: number, precision: number): number => {
   const multiplicator = Math.pow(10, precision);
   return Math.round(value * 100 * multiplicator) / multiplicator;
+};
+
+export const roundDown = (value: number, precision: number): number => {
+  const multiplicator = Math.pow(10, precision);
+  return Math.floor(value * 100 * multiplicator) / multiplicator;
+};
+
+export const roundUp = (value: number, precision: number): number => {
+  const multiplicator = Math.pow(10, precision);
+  return Math.ceil(value * 100 * multiplicator) / multiplicator;
 };
 
 export const getPrecision = (pluginOptions: PluginOptions): number => {
