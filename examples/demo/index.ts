@@ -314,14 +314,12 @@ createChart("Case.12 Multiple axis(combo horizontal bar/line)", {
         label: "bad",
         data: [5, 25],
         backgroundColor: COLORS.red,
-        stack: "stack1",
         xAxisID: "axis1",
       },
       {
         label: "better",
         data: [15, 10],
         backgroundColor: COLORS.yellow,
-        stack: "stack1",
         xAxisID: "axis1",
       },
       {
@@ -337,6 +335,9 @@ createChart("Case.12 Multiple axis(combo horizontal bar/line)", {
     indexAxis: "y",
     plugins: { stacked100: { enable: true, axisId: "axis1" } },
     scales: {
+      y: {
+        stacked: true,
+      },
       axis1: {
         position: "top",
       },
@@ -356,14 +357,12 @@ createChart("Case.13 Multiple axis(combo vertical bar/line)", {
         label: "bad",
         data: [5, 25],
         backgroundColor: COLORS.red,
-        stack: "stack1",
         yAxisID: "axis1",
       },
       {
         label: "better",
         data: [15, 10],
         backgroundColor: COLORS.yellow,
-        stack: "stack1",
         yAxisID: "axis1",
       },
       {
@@ -371,6 +370,118 @@ createChart("Case.13 Multiple axis(combo vertical bar/line)", {
         label: "good",
         data: [43, 24],
         backgroundColor: COLORS.blue,
+        yAxisID: "axis2",
+      },
+    ],
+  },
+  options: {
+    plugins: { stacked100: { enable: true, axisId: "axis1" } },
+    scales: {
+      x: {
+        stacked: true,
+      },
+      axis1: {
+        position: "left",
+      },
+      axis2: {
+        position: "right",
+      },
+    },
+  },
+});
+
+createChart("Case.14 Multiple axis with stack(combo horizontal bar/line)", {
+  type: "bar",
+  data: {
+    labels: ["Foo", "Bar"],
+    datasets: [
+      {
+        label: "bad",
+        data: [5, 25],
+        backgroundColor: COLORS.red,
+        stack: "stack 0",
+        xAxisID: "axis1",
+      },
+      {
+        label: "better",
+        data: [15, 10],
+        backgroundColor: COLORS.yellow,
+        stack: "stack 0",
+        xAxisID: "axis1",
+      },
+      {
+        label: "good",
+        data: [10, 20],
+        backgroundColor: COLORS.blue,
+        stack: "stack 1",
+        xAxisID: "axis1",
+      },
+      {
+        label: "very good",
+        data: [5, 24],
+        backgroundColor: COLORS.green,
+        stack: "stack 1",
+        xAxisID: "axis1",
+      },
+      {
+        type: "line",
+        label: "L1",
+        data: [43, 24],
+        xAxisID: "axis2",
+      },
+    ],
+  },
+  options: {
+    indexAxis: "y",
+    plugins: { stacked100: { enable: true, axisId: "axis1" } },
+    scales: {
+      axis1: {
+        position: "top",
+      },
+      axis2: {
+        position: "bottom",
+      },
+    },
+  },
+});
+
+createChart("Case.15 Multiple stacked axis with stack(combo vertical bar/line)", {
+  type: "bar",
+  data: {
+    labels: ["Foo", "Bar"],
+    datasets: [
+      {
+        label: "bad",
+        data: [5, 25],
+        backgroundColor: COLORS.red,
+        stack: "stack 0",
+        yAxisID: "axis1",
+      },
+      {
+        label: "better",
+        data: [15, 10],
+        backgroundColor: COLORS.yellow,
+        stack: "stack 0",
+        yAxisID: "axis1",
+      },
+      {
+        label: "good",
+        data: [10, 20],
+        backgroundColor: COLORS.blue,
+        stack: "stack 1",
+        yAxisID: "axis1",
+      },
+      {
+        label: "very good",
+        data: [5, 24],
+        backgroundColor: COLORS.green,
+        stack: "stack 1",
+        yAxisID: "axis1",
+      },
+      {
+        type: "line",
+        label: "L1",
+        data: [43, 24],
         yAxisID: "axis2",
       },
     ],
@@ -388,7 +499,7 @@ createChart("Case.13 Multiple axis(combo vertical bar/line)", {
   },
 });
 
-createChart("Case.14 horizontal bar chart with parsing option", {
+createChart("Case.16 horizontal bar chart with parsing option", {
   type: "bar",
   data: {
     labels: ["Foo", "Bar"],
@@ -427,7 +538,7 @@ createChart("Case.14 horizontal bar chart with parsing option", {
   },
 });
 
-createChart("Case.15 Complex parsing options", {
+createChart("Case.17 Complex parsing options", {
   type: "bar",
   data: {
     labels: ["Alice", "Bob"],
