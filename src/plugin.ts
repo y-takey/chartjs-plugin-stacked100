@@ -36,6 +36,7 @@ export const summarizeValues = (
   visibles: number[],
   isHorizontal: boolean,
   individual: boolean,
+  targetAxisId?: string,
   parsing?: ParsingOptions["parsing"],
 ) => {
   const { labels, datasets } = chartData;
@@ -43,22 +44,24 @@ export const summarizeValues = (
 
   const isStack = datasets?.[0]?.stack;
   const values = [...new Array(datasetDataLength)].map((el, i) => {
-    return datasets.reduce((sum, dataset, j) => {
-      const parsingOptions = dataset.parsing || parsing;
-      const key = dataset.stack || defaultStackKey;
-      const rec = dataset.data.find((ds, index) => {
-        return getDataIndex(labels, ds, parsingOptions, isHorizontal, index) == i;
-      });
-      if (!sum[key]) sum[key] = 0;
-      const value = Math.abs(dataValue(rec, isHorizontal, parsingOptions) || 0) * visibles[j];
-      if (individual && !isStack) {
-        if (sum[key] < value) sum[key] = value;
-      } else {
-        sum[key] += value;
-      }
+    return datasets
+      .filter((dataset) => isTargetDataset(dataset, targetAxisId))
+      .reduce((sum, dataset, j) => {
+        const parsingOptions = dataset.parsing || parsing;
+        const key = dataset.stack || defaultStackKey;
+        const rec = dataset.data.find((ds, index) => {
+          return getDataIndex(labels, ds, parsingOptions, isHorizontal, index) == i;
+        });
+        if (!sum[key]) sum[key] = 0;
+        const value = Math.abs(dataValue(rec, isHorizontal, parsingOptions) || 0) * visibles[j];
+        if (individual && !isStack) {
+          if (sum[key] < value) sum[key] = value;
+        } else {
+          sum[key] += value;
+        }
 
-      return sum;
-    }, {} as { [key: string | symbol]: number });
+        return sum;
+      }, {} as { [key: string | symbol]: number });
   });
 
   if (!isStack || !individual) return values;
@@ -86,7 +89,7 @@ const calculateRate = (
   targetAxisId?: string,
   parsing?: ParsingOptions["parsing"],
 ) => {
-  const totals = summarizeValues(data, visibles, isHorizontal, individual, parsing);
+  const totals = summarizeValues(data, visibles, isHorizontal, individual, targetAxisId, parsing);
 
   return data.datasets.map((dataset) => {
     const isTarget = isTargetDataset(dataset, targetAxisId);
