@@ -42,14 +42,15 @@ Chart.register(ChartjsPluginStacked100.default);
 
 ## Options
 
-| Name                | Type    | Default | Description                                                                                                                                 |
-| :------------------ | :------ | :------ | :------------------------------------------------------------------------------------------------------------------------------------------ |
-| enable              | boolean | false   |                                                                                                                                             |
-| replaceTooltipLabel | boolean | true    | replace tooltip label automatically.                                                                                                        |
-| fixNegativeScale    | boolean | true    | when datasets has negative value and `fixNegativeScale` is `false`, the nagative scale is variable. (the range is between `-100` and `-1`)  |
-| individual          | boolean | false   | scale the highest bar to 100%, and the rest would be proportional to the highest bar of a stack.                                            |
-| precision           | number  | 1       | precision of percentage. the range is between `0` and `16`                                                                                  |
-| axisId              | string  | -       | This option allows you to stack only the axis in a chart that includes multiple axes. By default, the plugin will attempt to stack all axes |
+| Name                | Type                          | Default | Description                                                                                                                                 |
+| :------------------ | :---------------------------- | :------ | :------------------------------------------------------------------------------------------------------------------------------------------ |
+| enable              | boolean                       | false   |                                                                                                                                             |
+| replaceTooltipLabel | boolean                       | true    | replace tooltip label automatically.                                                                                                        |
+| fixNegativeScale    | boolean                       | true    | when datasets has negative value and `fixNegativeScale` is `false`, the nagative scale is variable. (the range is between `-100` and `-1`)  |
+| individual          | boolean                       | false   | scale the highest bar to 100%, and the rest would be proportional to the highest bar of a stack.                                            |
+| round               | `"off"` \| `"down"` \| `"up"` | `"off"` | Use `"off"` to `Math.round`, `"down"` to `Math.floor`, and `"up"` to `Math.ceil`.                                                           |
+| precision           | number                        | 1       | precision of percentage. the range is between `0` and `16`                                                                                  |
+| axisId              | string                        | -       | This option allows you to stack only the axis in a chart that includes multiple axes. By default, the plugin will attempt to stack all axes |
 
 ## Usage
 
