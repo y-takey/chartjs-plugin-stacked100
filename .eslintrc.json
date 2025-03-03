@@ -8,11 +8,22 @@
       "experimentalObjectRestSpread": true
     }
   },
-  "plugins": ["@typescript-eslint"],
-  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:storybook/recommended"
+  ],
   "rules": {
     "comma-dangle": 0,
-    "max-len": ["error", { "code": 100 }],
+    "max-len": [
+      "error",
+      {
+        "code": 100
+      }
+    ],
     "no-unused-vars": "off",
     "no-unexpected-multiline": "warn",
     "prefer-const": "warn",
