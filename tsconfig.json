@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
+    "jsx": "react",
     "noImplicitAny": true,
     "outDir": "build",
     "module": "esnext",
     "target": "es5",
     "allowJs": true,
     "sourceMap": true,
+    "skipLibCheck": true,
     "declaration": true,
     "emitDeclarationOnly": true,
     "ignoreDeprecations": "5.0",
@@ -13,6 +15,6 @@
     "moduleResolution": "node",
     "esModuleInterop": true
   },
-  "include": ["src", "examples/demo"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }

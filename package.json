@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
-    "start": "webpack serve --mode development --config ./webpack/demo.config.js",
+    "start": "storybook dev -p 6006",
     "build:demo": "webpack --mode production --config ./webpack/demo.config.js",
     "build:plugin": "webpack --mode production --config ./webpack/plugin.config.js",
     "type": "yarn tsc src/*.ts --declaration --emitDeclarationOnly --outDir build --skipLibCheck",
@@ -14,7 +14,6 @@
     "dev": "yarn eslint && yarn test",
     "test": "jest --silent ./src/**",
     "test:watch": "jest --watch ./src/**",
-    "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
   "repository": {
@@ -44,6 +43,9 @@
     "@storybook/test": "^8.6.3",
     "@types/chart.js": "^2.9.41",
     "@types/jest": "^29.5.14",
+    "@types/mdx": "^2.0.13",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "@typescript-eslint/parser": "^7.4.0",
     "@vitest/browser": "^3.0.7",
@@ -56,6 +58,9 @@
     "jest": "^29.7.0",
     "playwright": "^1.50.1",
     "prettier": "^3.3.3",
+    "react": "^19.0.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^19.0.0",
     "storybook": "^8.6.3",
     "terser-webpack-plugin": "^5.3.10",
     "ts-jest": "^29.2.5",
