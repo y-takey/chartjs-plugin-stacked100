@@ -24,7 +24,7 @@ jobs:
   # Single deploy job since we're just deploying
   build-and-deploy:
     environment:
-      name: github-pages
+      name: github-pages-sb
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
