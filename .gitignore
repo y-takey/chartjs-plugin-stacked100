@@ -8,3 +8,4 @@ build/*
 /demo/*
 
 *storybook.log
+storybook-static
