@@ -16,7 +16,7 @@ import {
   getPrecision,
   isObject,
 } from "./utils";
-import { ExtendedChartData, ExtendedPlugin } from "./types";
+import { ExtendedChartData, ExtendedPlugin, PluginOptions } from "./types";
 
 export const defaultStackKey = Symbol();
 
@@ -39,45 +39,62 @@ const getDataIndex = (
   return labelIndex < 0 ? srcIndex : labelIndex;
 };
 
-export const summarizeValues = (
-  chartData: ChartData,
-  visibles: number[],
+const buildLabelIndexMap = (labels: unknown[]): Map<unknown, number> => {
+  const map = new Map<unknown, number>();
+  for (let i = 0; i < labels.length; i++) {
+    if (!map.has(labels[i])) {
+      map.set(labels[i], i);
+    }
+  }
+  return map;
+};
+
+const resolveDataIndex = (
+  labelIndexMap: Map<unknown, number>,
+  data: unknown,
+  parsing: ParsingOptions["parsing"],
   isHorizontal: boolean,
-  individual: boolean,
-  targetAxisId?: string,
-  parsing?: ParsingOptions["parsing"],
+  srcIndex: number,
 ) => {
-  const { labels, datasets } = chartData;
-  const datasetDataLength = labels.length;
+  if (!isObject(data)) return srcIndex;
 
-  const isStack = datasets?.[0]?.stack;
-  const values = [...new Array(datasetDataLength)].map((el, i) => {
-    return datasets
-      .filter((dataset) => isTargetDataset(dataset, targetAxisId))
-      .reduce((sum, dataset, j) => {
-        const parsingOptions = dataset.parsing || parsing;
-        const key = dataset.stack || defaultStackKey;
-        const rec = dataset.data.find((ds, index) => {
-          return getDataIndex(labels, ds, parsingOptions, isHorizontal, index) == i;
-        });
-        if (!sum[key]) sum[key] = 0;
-        const value = Math.abs(dataValue(rec, isHorizontal, parsingOptions) || 0) * visibles[j];
-        if (individual && !isStack) {
-          if (sum[key] < value) sum[key] = value;
-        } else {
-          sum[key] += value;
-        }
+  const axis = isHorizontal ? "y" : "x";
+  const parseKey = parsing && parsing[`${axis}AxisKey`];
+  if (!parseKey) return srcIndex;
+  const label = data[parseKey];
+  if (!label) return srcIndex;
+  const labelIndex = labelIndexMap.get(label);
 
-        return sum;
-      }, {} as { [key: string | symbol]: number });
-  });
+  return labelIndex !== undefined ? labelIndex : srcIndex;
+};
 
-  if (!isStack || !individual) return values;
-  return values.map((rec) => {
-    const maxVal = Math.max(...(Object.values(rec) as number[]));
-    Object.keys(rec).forEach((key) => (rec[key] = maxVal));
-    return rec;
-  });
+const mapDataToLabelIndices = (
+  labelIndexMap: Map<unknown, number>,
+  labels: unknown[],
+  data: unknown[],
+  parsing: ParsingOptions["parsing"],
+  isHorizontal: boolean,
+): unknown[] => {
+  if (data.length === 0 || !isObject(data[0])) return data;
+
+  const axis = isHorizontal ? "y" : "x";
+  const parseKey = parsing && parsing[`${axis}AxisKey`];
+  if (!parseKey) return data;
+
+  const mapped: unknown[] = new Array(labels.length);
+  for (let i = 0; i < data.length; i++) {
+    const label = (data[i] as Record<string, any>)[parseKey];
+    if (!label) {
+      if (mapped[i] === undefined) mapped[i] = data[i];
+      continue;
+    }
+    const labelIndex = labelIndexMap.get(label);
+    const idx = labelIndex !== undefined ? labelIndex : i;
+    if (mapped[idx] === undefined) {
+      mapped[idx] = data[i];
+    }
+  }
+  return mapped;
 };
 
 const isTargetDataset = (dataset: ChartData["datasets"][0], targetAxisId?: string) => {
@@ -86,6 +103,80 @@ const isTargetDataset = (dataset: ChartData["datasets"][0], targetAxisId?: strin
   // FIXME: avoid type error without any cast.
   const axisId = (dataset as any).xAxisID || (dataset as any).yAxisID;
   return axisId === targetAxisId;
+};
+
+export const summarizeValues = (
+  chartData: ChartData,
+  visibles: number[],
+  isHorizontal: boolean,
+  individual: boolean,
+  targetAxisId?: string,
+  parsing?: ParsingOptions["parsing"],
+) => {
+  return summarizeValuesInternal(
+    chartData, visibles, isHorizontal, individual,
+    targetAxisId, parsing, buildLabelIndexMap(chartData.labels),
+  );
+};
+
+const summarizeValuesInternal = (
+  chartData: ChartData,
+  visibles: number[],
+  isHorizontal: boolean,
+  individual: boolean,
+  targetAxisId: string | undefined,
+  parsing: ParsingOptions["parsing"] | undefined,
+  labelIndexMap: Map<unknown, number>,
+) => {
+  const { labels, datasets } = chartData;
+  const datasetDataLength = labels.length;
+
+  const isStack = datasets?.[0]?.stack;
+
+  const targetInfos: Array<{
+    parsingOptions: ParsingOptions["parsing"];
+    key: string | symbol;
+    mapped: unknown[];
+    filteredIndex: number;
+  }> = [];
+  let filteredIndex = 0;
+  for (const dataset of datasets) {
+    if (!isTargetDataset(dataset, targetAxisId)) continue;
+    const parsingOptions = dataset.parsing || parsing;
+    targetInfos.push({
+      parsingOptions,
+      key: dataset.stack || defaultStackKey,
+      mapped: mapDataToLabelIndices(
+        labelIndexMap, labels, dataset.data, parsingOptions, isHorizontal,
+      ),
+      filteredIndex: filteredIndex++,
+    });
+  }
+
+  const values = new Array(datasetDataLength);
+  for (let i = 0; i < datasetDataLength; i++) {
+    const sum: { [key: string | symbol]: number } = {};
+    for (let t = 0; t < targetInfos.length; t++) {
+      const info = targetInfos[t];
+      const rec = info.mapped[i];
+      if (!sum[info.key]) sum[info.key] = 0;
+      const dv = dataValue(rec, isHorizontal, info.parsingOptions);
+      const value = Math.abs(dv || 0) * visibles[info.filteredIndex];
+      if (individual && !isStack) {
+        if (sum[info.key] < value) sum[info.key] = value;
+      } else {
+        sum[info.key] += value;
+      }
+    }
+    values[i] = sum;
+  }
+
+  if (!isStack || !individual) return values;
+  return values.map((rec) => {
+    const maxVal = Math.max(...(Object.values(rec) as number[]));
+    Object.keys(rec).forEach((key) => (rec[key] = maxVal));
+    return rec;
+  });
 };
 
 const calculateRate = (
@@ -98,7 +189,10 @@ const calculateRate = (
   targetAxisId?: string,
   parsing?: ParsingOptions["parsing"],
 ) => {
-  const totals = summarizeValues(data, visibles, isHorizontal, individual, targetAxisId, parsing);
+  const labelIndexMap = buildLabelIndexMap(data.labels);
+  const totals = summarizeValuesInternal(
+    data, visibles, isHorizontal, individual, targetAxisId, parsing, labelIndexMap,
+  );
 
   const round =
     roundOption === "off"
@@ -109,12 +203,12 @@ const calculateRate = (
 
   return data.datasets.map((dataset) => {
     const isTarget = isTargetDataset(dataset, targetAxisId);
+    const parsingOptions = dataset.parsing || parsing;
 
     const ret = new Array(data.labels.length);
     dataset.data.forEach((val, j) => {
-      const parsingOptions = dataset.parsing || parsing;
       const dv = dataValue(val, isHorizontal, parsingOptions);
-      const dataIndex = getDataIndex(data.labels, val, parsingOptions, isHorizontal, j);
+      const dataIndex = resolveDataIndex(labelIndexMap, val, parsingOptions, isHorizontal, j);
       if (isTarget) {
         const key = dataset.stack || defaultStackKey;
         const total = totals[dataIndex][key];
@@ -214,6 +308,17 @@ export const beforeInit: ExtendedPlugin["beforeInit"] = (chartInstance, args, pl
   );
 };
 
+interface CacheState {
+  visibles: number[];
+  individual: PluginOptions["individual"];
+  roundOption: PluginOptions["roundOption"];
+  precision: PluginOptions["precision"];
+  axisId: PluginOptions["axisId"];
+  dataRefs: unknown[];
+}
+
+const updateCache = new WeakMap<object, CacheState>();
+
 export const beforeUpdate: ExtendedPlugin["beforeUpdate"] = (
   chartInstance,
   _args,
@@ -222,11 +327,26 @@ export const beforeUpdate: ExtendedPlugin["beforeUpdate"] = (
   if (!pluginOptions.enable) return;
 
   const data = chartInstance.data;
-
-  setOriginalData(data);
   const visibles = data.datasets.map((dataset, i) =>
     chartInstance.getDatasetMeta(i)?.hidden ?? dataset.hidden ? 0 : 1,
   );
+
+  const cached = updateCache.get(chartInstance);
+  if (cached && data.originalData && data.calculatedData &&
+    data.datasets.length === cached.dataRefs.length &&
+    data.datasets.every((ds, i) => ds.data === cached.dataRefs[i]) &&
+    visibles.length === cached.visibles.length &&
+    visibles.every((v, i) => v === cached.visibles[i]) &&
+    pluginOptions.individual === cached.individual &&
+    pluginOptions.roundOption === cached.roundOption &&
+    pluginOptions.precision === cached.precision &&
+    pluginOptions.axisId === cached.axisId
+  ) {
+    reflectData(data.calculatedData, data.datasets);
+    return;
+  }
+
+  setOriginalData(data);
   const precision = getPrecision(pluginOptions);
   data.calculatedData = calculateRate(
     data,
@@ -238,6 +358,16 @@ export const beforeUpdate: ExtendedPlugin["beforeUpdate"] = (
     pluginOptions.axisId,
     chartInstance.options.parsing,
   );
+
+  updateCache.set(chartInstance, {
+    visibles: [...visibles],
+    individual: pluginOptions.individual,
+    roundOption: pluginOptions.roundOption,
+    precision: pluginOptions.precision,
+    axisId: pluginOptions.axisId,
+    dataRefs: data.originalData.map((d) => d),
+  });
+
   reflectData(data.calculatedData, data.datasets);
 };
 
