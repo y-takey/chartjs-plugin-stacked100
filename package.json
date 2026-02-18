@@ -2,8 +2,8 @@
   "name": "chartjs-plugin-stacked100",
   "version": "1.7.0",
   "description": "This plugin for Chart.js that makes your bar chart to 100% stacked bar chart",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
     "start": "storybook dev -p 6006",
     "build:demo": "webpack --mode production --config ./webpack/demo.config.js",
