@@ -18,6 +18,17 @@ import {
 } from "./utils";
 import { ExtendedChartData, ExtendedPlugin, PluginOptions } from "./types";
 
+interface CacheState {
+  visibles: number[];
+  individual: boolean;
+  roundOption: "off" | "down" | "up";
+  precision: number;
+  axisId: string | undefined;
+  parsing: unknown;
+}
+
+const cacheMap = new WeakMap<object, CacheState>();
+
 export const defaultStackKey = Symbol();
 
 const getDataIndex = (
@@ -308,16 +319,33 @@ export const beforeInit: ExtendedPlugin["beforeInit"] = (chartInstance, args, pl
   );
 };
 
-interface CacheState {
-  visibles: number[];
-  individual: PluginOptions["individual"];
-  roundOption: PluginOptions["roundOption"];
-  precision: PluginOptions["precision"];
-  axisId: PluginOptions["axisId"];
-  dataRefs: unknown[];
-}
+const canUseCachedResult = (
+  data: ExtendedChartData,
+  visibles: number[],
+  precision: number,
+  pluginOptions: PluginOptions,
+  parsing: unknown,
+  cached: CacheState | undefined,
+): boolean => {
+  if (!data.originalData || !data.calculatedData || !cached) return false;
+  if (data.originalData.length !== data.datasets.length) return false;
+  if (cached.visibles.length !== visibles.length) return false;
 
-const updateCache = new WeakMap<object, CacheState>();
+  for (let i = 0; i < data.datasets.length; i++) {
+    if (data.datasets[i].data !== data.originalData[i]) return false;
+  }
+  for (let i = 0; i < visibles.length; i++) {
+    if (cached.visibles[i] !== visibles[i]) return false;
+  }
+
+  return (
+    cached.individual === !!pluginOptions.individual &&
+    cached.roundOption === (pluginOptions.roundOption || "off") &&
+    cached.precision === precision &&
+    cached.axisId === pluginOptions.axisId &&
+    cached.parsing === parsing
+  );
+};
 
 export const beforeUpdate: ExtendedPlugin["beforeUpdate"] = (
   chartInstance,
@@ -330,24 +358,16 @@ export const beforeUpdate: ExtendedPlugin["beforeUpdate"] = (
   const visibles = data.datasets.map((dataset, i) =>
     chartInstance.getDatasetMeta(i)?.hidden ?? dataset.hidden ? 0 : 1,
   );
+  const precision = getPrecision(pluginOptions);
+  const parsing = chartInstance.options.parsing;
 
-  const cached = updateCache.get(chartInstance);
-  if (cached && data.originalData && data.calculatedData &&
-    data.datasets.length === cached.dataRefs.length &&
-    data.datasets.every((ds, i) => ds.data === cached.dataRefs[i]) &&
-    visibles.length === cached.visibles.length &&
-    visibles.every((v, i) => v === cached.visibles[i]) &&
-    pluginOptions.individual === cached.individual &&
-    pluginOptions.roundOption === cached.roundOption &&
-    pluginOptions.precision === cached.precision &&
-    pluginOptions.axisId === cached.axisId
-  ) {
+  const cached = cacheMap.get(chartInstance);
+  if (canUseCachedResult(data, visibles, precision, pluginOptions, parsing, cached)) {
     reflectData(data.calculatedData, data.datasets);
     return;
   }
 
   setOriginalData(data);
-  const precision = getPrecision(pluginOptions);
   data.calculatedData = calculateRate(
     data,
     visibles,
@@ -356,19 +376,18 @@ export const beforeUpdate: ExtendedPlugin["beforeUpdate"] = (
     pluginOptions.individual,
     pluginOptions.roundOption,
     pluginOptions.axisId,
-    chartInstance.options.parsing,
+    parsing,
   );
-
-  updateCache.set(chartInstance, {
-    visibles: [...visibles],
-    individual: pluginOptions.individual,
-    roundOption: pluginOptions.roundOption,
-    precision: pluginOptions.precision,
-    axisId: pluginOptions.axisId,
-    dataRefs: data.originalData.map((d) => d),
-  });
-
   reflectData(data.calculatedData, data.datasets);
+
+  cacheMap.set(chartInstance, {
+    visibles: [...visibles],
+    individual: !!pluginOptions.individual,
+    roundOption: pluginOptions.roundOption || "off",
+    precision,
+    axisId: pluginOptions.axisId,
+    parsing,
+  });
 };
 
 export const afterUpdate: ExtendedPlugin["afterUpdate"] = (chartInstance, _args, pluginOptions) => {
