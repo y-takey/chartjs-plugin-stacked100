@@ -1,20 +1,20 @@
-import { Meta, Markdown } from "@storybook/blocks";
+import { Meta, Markdown } from "@storybook/addon-docs/blocks";
 
 <Meta title="Options" />
 
 ## Options
 
 <Markdown>
-  {`
-| Name                | Type                          | Default |
-| :------------------ | :---------------------------- | :------ |
-| enable              | boolean                       | false   |
-| replaceTooltipLabel | boolean                       | true    |
-| fixNegativeScale | boolean | true |
-| individual | boolean | false |
-| round | "off" or "down" or "up" | "off" |
-| precision | number | 1 |
-| axisId | string | - |
+{`
+| Name                | Type                    | Default |
+| :------------------ | :---------------------- | :------ |
+| enable              | boolean                 | false   |
+| replaceTooltipLabel | boolean                 | true    |
+| fixNegativeScale    | boolean                 | true    |
+| individual          | boolean                 | false   |
+| round               | "off" or "down" or "up" | "off"   |
+| precision           | number                  | 1       |
+| axisId              | string                  | -       |
 
 For more details, please see here: https://github.com/y-takey/chartjs-plugin-stacked100#options
 `}
