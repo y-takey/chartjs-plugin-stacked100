@@ -12,7 +12,7 @@
     "emitDeclarationOnly": true,
     "ignoreDeprecations": "5.0",
     "lib": ["es2018", "dom"],
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "esModuleInterop": true
   },
   "include": ["src"],
